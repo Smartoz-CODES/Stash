@@ -1,8 +1,12 @@
-import { useState, useEffect, useMemo, useCallback } from 'react'
-import { useResources } from '../../Hooks/use-resource'
-import { useCategories } from '../../Hooks/use-categories'
-import type { FilterParams, ResourceCounts } from '../../Types/filters'
-import type { Resource } from '../../Types/resource'
+import { useState, useEffect, useMemo, useCallback } from "react";
+import { useResources } from "../../Hooks/use-resource";
+import { useCategories } from "../../Hooks/use-categories";
+import SearchBar from "../../Components/search-bar";
+import ViewToggle from "../../Components/view-toggle";
+import type { FilterParams, ResourceCounts } from "../../Types/filters";
+import type { Resource } from "../../Types/resource";
+import type { Category } from "../../Types/category";
+import "../../Styles/dashboard.css";
 
 const DashboardPage = () => {
   // ─── Hooks ───
@@ -10,89 +14,81 @@ const DashboardPage = () => {
     resources,
     loading: resourcesLoading,
     fetchResources,
-    // createResource,
-    // updateResource,
     deleteResource,
     markAsRead,
     toggleFavourite,
     toggleRevisit,
-  } = useResources()
+  } = useResources();
 
-  const { categories } = useCategories()
+  const { categories } = useCategories();
 
-  // Local State
-  const [activeFilters, setActiveFilters] = useState<FilterParams>({})
+  // ─── Local State ───
+  const [activeFilters, setActiveFilters] = useState<FilterParams>({});
+  const [searchTerm, setSearchTerm] = useState("");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [deletingResourceId, setDeletingResourceId] = useState<string | null>(
+    null,
+  );
 
-  // Search term
-  const [searchTerm, setSearchTerm] = useState('')
-
-  // View mode, grid or list layout
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
-
-  // Modal state (Resource Deleted)
-//   const [showSaveForm, setShowSaveForm] = useState(false)
-//   const [editingResource, setEditingResource] = useState<Resource | null>(null)
-  const [deletingResourceId, setDeletingResourceId] = useState<string | null>(null)
-
-
-   const stableFetchResources = useCallback(
+  // ─── Debounced Search ───
+  const stableFetchResources = useCallback(
     (filters: FilterParams) => fetchResources(filters),
-    [fetchResources]
-  )
-  
+    [fetchResources],
+  );
+
   useEffect(() => {
-      const filtersWithSearch: FilterParams = {
-        ...activeFilters,
-        searchTerm: searchTerm || undefined,
-      }
+    const filtersWithSearch: FilterParams = {
+      ...activeFilters,
+      searchTerm: searchTerm || undefined,
+    };
 
-      const timer = setTimeout(() => {
-      stableFetchResources(filtersWithSearch)
-    }, 300)
+    const timer = setTimeout(() => {
+      stableFetchResources(filtersWithSearch);
+    }, 300);
 
-    return () => clearTimeout(timer)
-  }, [searchTerm, activeFilters,stableFetchResources])
+    return () => clearTimeout(timer);
+  }, [searchTerm, activeFilters, stableFetchResources]);
 
+  // ─── Derived Data ───
+  const counts: ResourceCounts = useMemo(
+    () => ({
+      total: resources.length,
+      unread: resources.filter((r: Resource) => !r.is_read).length,
+      read: resources.filter((r: Resource) => r.is_read).length,
+      favourites: resources.filter((r: Resource) => r.is_favourite).length,
+      revisit: resources.filter((r: Resource) => r.is_revisit).length,
+    }),
+    [resources],
+  );
 
-  const counts: ResourceCounts = useMemo(() => ({
-    total: resources.length,
-    unread: resources.filter((r: Resource) => !r.is_read).length,
-    read: resources.filter((r: Resource) => r.is_read).length,
-    favourites: resources.filter((r: Resource) => r.is_favourite).length,
-    revisit: resources.filter((r: Resource) => r.is_revisit).length,
-  }), [resources])
-
+  // Look up category name from ID
   const getCategoryName = (categoryId: string): string => {
-    const match = categories.find((c) => c.id === categoryId)
-    return match ? match.name : "Uncategorized"
-  }
-   
-  // ─── Event Handlers ───
-//   const handleFilterChange = (newFilters: FilterParams) => {
-//     setActiveFilters(newFilters)
-//   }
+    const match = categories.find((c: Category) => c.id === categoryId);
+    return match ? match.name : "Uncategorised";
+  };
 
+  // ─── Event Handlers ───
   const handleOpenResource = (id: string) => {
-    const resource = resources.find((r) => r.id === id)
-    if (!resource) return
-    markAsRead(id)
+    const resource = resources.find((r: Resource) => r.id === id);
+    if (!resource) return;
+
+    markAsRead(id);
 
     if (resource.url) {
-      window.open(resource.url, '_blank')
+      window.open(resource.url, "_blank");
     }
-  }
+  };
 
-   const handleDeleteClick = (id: string) => {
-    setDeletingResourceId(id)
-  }
+  const handleDeleteClick = (id: string) => {
+    setDeletingResourceId(id);
+  };
 
-   const handleConfirmDelete = async () => {
+  const handleConfirmDelete = async () => {
     if (deletingResourceId) {
-      await deleteResource(deletingResourceId)
-      setDeletingResourceId(null)
+      await deleteResource(deletingResourceId);
+      setDeletingResourceId(null);
     }
-  }
-
+  };
 
   // ─── Loading State ───
   if (resourcesLoading && resources.length === 0) {
@@ -100,12 +96,13 @@ const DashboardPage = () => {
       <div className="dashboard-loading">
         <p>Loading your library...</p>
       </div>
-    )
+    );
   }
 
   // ─── Render ───
   return (
     <div className="dashboard-page">
+      {/* Top bar */}
       <div className="dashboard-header">
         <div className="dashboard-title">
           <h1>Library</h1>
@@ -113,38 +110,14 @@ const DashboardPage = () => {
         </div>
 
         <div className="dashboard-actions">
-          <input
-            type="text"
-            placeholder="Search by title, tags or category"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
+          <SearchBar value={searchTerm} onChange={setSearchTerm} />
+          <ViewToggle view={viewMode} onChange={setViewMode} />
 
-          <div className="view-toggle">
-            <button
-              className={viewMode === 'list' ? 'active' : ''}
-              onClick={() => setViewMode('list')}
-              aria-label="List view"
-            >
-            </button>
-            <button
-              className={viewMode === 'grid' ? 'active' : ''}
-              onClick={() => setViewMode('grid')}
-              aria-label="Grid view"
-            >
-            </button>
-          </div>
-
-          <button
-            className="save-button">
-                + Save Resource
-                  </button>
+          <button className="save-button">+ Save Resource</button>
         </div>
       </div>
-            
-        
 
+      {/* Status summary cards */}
       <div className="dashboard-stats">
         <div className="stat-card">
           <span className="stat-number">{counts.total}</span>
@@ -164,8 +137,8 @@ const DashboardPage = () => {
         </div>
       </div>
 
+      {/* Resource grid/list */}
       {resources.length === 0 ? (
-        // Empty state
         <div className="empty-state">
           <h2>No resources found</h2>
           <p>
@@ -177,8 +150,8 @@ const DashboardPage = () => {
             <button
               className="clear-filters-button"
               onClick={() => {
-                setActiveFilters({})
-                setSearchTerm('')
+                setActiveFilters({});
+                setSearchTerm("");
               }}
             >
               Clear Filters
@@ -187,25 +160,24 @@ const DashboardPage = () => {
         </div>
       ) : (
         <div className={`resource-grid ${viewMode}`}>
-          {resources.map((resource) => (
-            // ─── Resource Card Placeholder ───
-            // Would replace this <div> with <ResourceCard /> once Dev C delivers it
-            // The props will be the same — just swap the JSX
+          {resources.map((resource: Resource) => (
+            // Replace with <ResourceCard /> when Dev C delivers the updated version.
             <div
               key={resource.id}
-              className={`resource-card-placeholder ${resource.is_read ? 'read' : 'unread'}`}
+              className={`resource-card-placeholder ${resource.is_read ? "read" : "unread"}`}
               onClick={() => handleOpenResource(resource.id)}
             >
               {!resource.is_read && <span className="unread-dot" />}
-
 
               <span className="category-badge">
                 {getCategoryName(resource.category_id)}
               </span>
 
+              {resource.is_revisit && (
+                <span className="revisit-badge">Revisit</span>
+              )}
 
               <h3 className="resource-title">{resource.title}</h3>
-
 
               {resource.description && (
                 <p className="resource-description">{resource.description}</p>
@@ -213,52 +185,51 @@ const DashboardPage = () => {
 
               {resource.tags.length > 0 && (
                 <div className="resource-tags">
-                  {resource.tags.map((tag:string) => (
-                    <span key={tag} className="tag-pill">#{tag}</span>
+                  {resource.tags.map((tag: string) => (
+                    <span key={tag} className="tag-pill">
+                      #{tag}
+                    </span>
                   ))}
                 </div>
               )}
 
               <div className="resource-footer">
                 <span className="resource-date">
-                  Saved {new Date(resource.created_at).toLocaleDateString('en-GB', {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric',
+                  Saved{" "}
+                  {new Date(resource.created_at).toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
                   })}
                 </span>
 
                 <div className="resource-actions">
-
                   <button
                     onClick={(e) => {
-                      e.stopPropagation() // prevent card click (which triggers markAsRead)
-                      toggleFavourite(resource.id, resource.is_favourite)
+                      e.stopPropagation();
+                      toggleFavourite(resource.id, resource.is_favourite);
                     }}
-                    className={`favourite-btn ${resource.is_favourite ? 'active' : ''}`}
-                    aria-label={resource.is_favourite ? 'Remove from favourites' : 'Add to favourites'}
+                    className={`favourite-btn ${resource.is_favourite ? "active" : ""}`}
                   >
-                    {resource.is_favourite ? '♥' : '♡'}
+                    {resource.is_favourite ? "♥" : "♡"}
                   </button>
 
-
-                  {resource.is_revisit && (
-                    <button
-                    onClick={(e) => {
-                        e.stopPropagation()
-                         toggleRevisit(resource.id, resource.is_revisit)
-                      }}
-                    className="revisit-badge">Revisit</button>
-                  )}
-
-                
                   <button
                     onClick={(e) => {
-                      e.stopPropagation()
-                      handleDeleteClick(resource.id)
+                      e.stopPropagation();
+                      toggleRevisit(resource.id, resource.is_revisit);
+                    }}
+                    className="revisit-btn"
+                  >
+                    ↻
+                  </button>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteClick(resource.id);
                     }}
                     className="delete-btn"
-                    aria-label="Delete resource"
                   >
                     ✕
                   </button>
@@ -269,13 +240,19 @@ const DashboardPage = () => {
         </div>
       )}
 
+      {/* Delete confirmation modal */}
       {deletingResourceId && (
-        <div className="modal-overlay" onClick={() => setDeletingResourceId(null)}>
+        <div
+          className="modal-overlay"
+          onClick={() => setDeletingResourceId(null)}
+        >
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h3>Delete Resource</h3>
             <p>This action cannot be undone. Are you sure?</p>
             <div className="modal-actions">
-              <button onClick={() => setDeletingResourceId(null)}>Cancel</button>
+              <button onClick={() => setDeletingResourceId(null)}>
+                Cancel
+              </button>
               <button onClick={handleConfirmDelete} className="delete-confirm">
                 Delete
               </button>
@@ -284,7 +261,7 @@ const DashboardPage = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default DashboardPage
+export default DashboardPage;
