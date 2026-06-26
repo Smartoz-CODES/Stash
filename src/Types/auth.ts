@@ -9,7 +9,3 @@ export interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
-
-export interface AuthProviderProps {
-  children: React.ReactNode;
-}
