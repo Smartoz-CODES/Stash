@@ -1,6 +1,6 @@
 import {
   createContext,
-  useContext,
+  
   useEffect,
   useState,
   type ReactNode,
@@ -11,7 +11,7 @@ import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "../Lib/supabase";
 import type { AuthContextType } from "../Types/auth";
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -48,16 +48,39 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     };
   }, []);
 
-  const signUp = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+//   const signUp = async (email: string, password: string) => {
+//     const { error } = await supabase.auth.signUp({
+//       email,
+//       password,
+//     });
 
-    if (error) {
-      throw error;
-    }
-  };
+//     if (error) {
+//       throw error;
+//     }
+//   };
+const signUp = async (email: string, password: string) => {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  // Seeding default categories for the new user upon account creation
+  if (data.user) {
+    const defaults = ["Work", "Learning", "Personal", "Business"];
+    const rows = defaults.map((name) => ({
+      name,
+      user_id: data.user!.id,
+    }));
+
+    await supabase.from("categories").insert(rows);
+  }
+};
+
+  
 
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({
@@ -94,12 +117,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   );
 };
 
-export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext);
+// export const useAuth = (): AuthContextType => {
+//   const context = useContext(AuthContext);
 
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider.");
-  }
+//   if (!context) {
+//     throw new Error("useAuth must be used within an AuthProvider.");
+//   }
 
-  return context;
-};
+//   return context;
+// };
