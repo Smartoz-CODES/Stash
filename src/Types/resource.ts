@@ -1,4 +1,3 @@
-// Core data type of the entire app
 export interface Resource {
   id: string;
   user_id: string;
@@ -15,8 +14,6 @@ export interface Resource {
   created_at: string;
   updated_at: string;
 }
-
-// For creating a new resource
 export interface CreateResourceInput {
   title: string;
   url?: string;

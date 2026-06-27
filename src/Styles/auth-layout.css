@@ -1,0 +1,93 @@
+.auth-layout {
+  display: flex;
+  min-height: 100vh;
+}
+.auth-brand {
+  width: 420px;
+  background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #c4b5fd 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  position: relative;
+  overflow: hidden;
+}
+.auth-brand::before,
+.auth-brand::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+}
+.auth-brand::before {
+  width: 300px;
+  height: 300px;
+  top: -80px;
+  left: -80px;
+}
+.auth-brand::after {
+  width: 200px;
+  height: 200px;
+  bottom: -60px;
+  right: -40px;
+}
+.brand-content {
+  position: relative;
+  z-index: 1;
+}
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 48px;
+}
+.brand-logo-icon {
+  width: 36px;
+  height: 36px;
+  background: white;
+  color: #7c3aed;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 18px;
+}
+.brand-logo-text {
+  font-size: 22px;
+  font-weight: 700;
+}
+.brand-heading {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 16px;
+}
+.brand-sub {
+  font-size: 14px;
+  opacity: 0.85;
+  line-height: 1.5;
+  margin: 0 0 32px;
+}
+.brand-features {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.brand-features p {
+  font-size: 14px;
+  margin: 0;
+}
+.brand-features p::before {
+  content: "\2713  ";
+  font-weight: 700;
+}
+.auth-form-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #faf5ff;
+  padding: 48px;
+}

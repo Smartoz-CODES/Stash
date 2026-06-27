@@ -1,0 +1,110 @@
+.rf-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+.rf-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+.rf-heading {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 4px;
+}
+.rf-sub {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 24px;
+}
+.rf-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.rf-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.rf-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+.rf-group input,
+.rf-group textarea,
+.rf-group select {
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #1f2937;
+  background: white;
+  outline: none;
+  font-family: inherit;
+  width: 100%;
+  box-sizing: border-box;
+}
+.rf-group input:focus,
+.rf-group textarea:focus,
+.rf-group select:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+.rf-group textarea {
+  resize: vertical;
+}
+.rf-error {
+  color: #dc2626;
+  font-size: 13px;
+  margin: 0;
+  padding: 8px 12px;
+  background: #fef2f2;
+  border-radius: 8px;
+}
+.rf-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 8px;
+}
+.rf-cancel {
+  padding: 10px 24px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: white;
+  color: #4b5563;
+  font-size: 14px;
+  cursor: pointer;
+}
+.rf-cancel:hover {
+  background: #f9fafb;
+}
+.rf-submit {
+  padding: 10px 24px;
+  background: #7c3aed;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.rf-submit:hover {
+  background: #6d28d9;
+}
+.rf-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

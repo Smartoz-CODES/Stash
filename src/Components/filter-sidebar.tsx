@@ -1,13 +1,13 @@
 import type { Category } from "../Types/category";
 import type { FilterParams, ResourceCounts } from "../Types/filters";
-import "../Styles/components.css";
+import "../Styles/filter-sidebar.css";
 
 type Props = {
   categories: Category[];
   allTags: string[];
   activeFilters: FilterParams;
   resourceCounts: ResourceCounts;
-  onFilterChange: (filters: FilterParams) => void;
+  onFilterChange: (f: FilterParams) => void;
   onManageCategories: () => void;
 };
 
@@ -19,199 +19,121 @@ export default function FilterSidebar({
   onFilterChange,
   onManageCategories,
 }: Props) {
-  const isActiveCategory = (id: string | undefined): boolean => {
-    return activeFilters.categoryId === id;
-  };
-
-  const setFilter = (updates: Partial<FilterParams>) => {
-    onFilterChange({ ...activeFilters, ...updates });
-  };
-
+  const setFilter = (u: Partial<FilterParams>) =>
+    onFilterChange({ ...activeFilters, ...u });
   const removeFilter = (...keys: (keyof FilterParams)[]) => {
-    const updated = { ...activeFilters };
-    keys.forEach((key) => {
-      delete updated[key];
+    const up = { ...activeFilters };
+    keys.forEach((k) => {
+      delete up[k];
     });
-    onFilterChange(updated);
+    onFilterChange(up);
   };
-
-  const clearAllFilters = () => {
-    onFilterChange({});
-  };
-
-  const hasActiveFilters = Object.keys(activeFilters).length > 0;
+  const clearAll = () => onFilterChange({});
 
   return (
     <aside className="filter-sidebar">
-      <div className="sidebar-logo">
-        <span className="logo-icon">S</span>
-        <span className="logo-text">stash</span>
+      <div className="sb-logo">
+        <span className="sb-logo-icon">S</span>
+        <span className="sb-logo-text">stash</span>
       </div>
-
-      <nav className="sidebar-nav">
-        <p className="sidebar-label">MENU</p>
-
+      <nav className="sb-nav">
+        <p className="sb-label">MENU</p>
         <button
-          className={`nav-item ${!activeFilters.categoryId && !activeFilters.isFavourite ? "active" : ""}`}
-          onClick={clearAllFilters}
+          className={`sb-nav-item ${!activeFilters.categoryId && !activeFilters.isFavourite ? "active" : ""}`}
+          onClick={clearAll}
         >
-          <span>📋</span>
           <span>Dashboard</span>
         </button>
-
-        <button className="nav-item" onClick={clearAllFilters}>
-          <span>📁</span>
+        <button className="sb-nav-item" onClick={clearAll}>
           <span>Library</span>
-          <span className="badge">{resourceCounts.total}</span>
+          <span className="sb-badge">{resourceCounts.total}</span>
         </button>
-
         <button
-          className={`nav-item ${activeFilters.isFavourite ? "active" : ""}`}
-          onClick={() => {
-            if (activeFilters.isFavourite) {
-              removeFilter("isFavourite");
-            } else {
-              setFilter({ isFavourite: true });
-            }
-          }}
+          className={`sb-nav-item ${activeFilters.isFavourite ? "active" : ""}`}
+          onClick={() =>
+            activeFilters.isFavourite
+              ? removeFilter("isFavourite")
+              : setFilter({ isFavourite: true })
+          }
         >
-          <span>♡</span>
           <span>Favourites</span>
-          <span className="badge">{resourceCounts.favourites}</span>
+          <span className="sb-badge">{resourceCounts.favourites}</span>
         </button>
       </nav>
-
-      <div className="sidebar-section">
-        <p className="sidebar-label">CATEGORIES</p>
-
+      <div className="sb-section">
+        <p className="sb-label">CATEGORIES</p>
         <button
-          className={`filter-item ${!activeFilters.categoryId ? "active" : ""}`}
+          className={`sb-filter ${!activeFilters.categoryId ? "active" : ""}`}
           onClick={() => removeFilter("categoryId")}
         >
           All
         </button>
-
-        {categories.map((category: Category) => (
+        {categories.map((c: Category) => (
           <button
-            key={category.id}
-            className={`filter-item ${isActiveCategory(category.id) ? "active" : ""}`}
-            onClick={() => setFilter({ categoryId: category.id })}
+            key={c.id}
+            className={`sb-filter ${activeFilters.categoryId === c.id ? "active" : ""}`}
+            onClick={() => setFilter({ categoryId: c.id })}
           >
-            {category.name}
+            {c.name}
           </button>
         ))}
-
-        <button className="manage-link" onClick={onManageCategories}>
+        <button className="sb-manage" onClick={onManageCategories}>
           Manage Categories
         </button>
       </div>
-
-      <div className="sidebar-section">
-        <p className="sidebar-label">STATUS</p>
-
+      <div className="sb-section">
+        <p className="sb-label">STATUS</p>
         <button
-          className={`filter-item ${activeFilters.isRead === undefined && !activeFilters.neverOpened ? "active" : ""}`}
+          className={`sb-filter ${activeFilters.isRead === undefined && !activeFilters.neverOpened ? "active" : ""}`}
           onClick={() => removeFilter("isRead", "neverOpened")}
         >
           All
         </button>
-
         <button
-          className={`filter-item ${activeFilters.isRead === false ? "active" : ""}`}
+          className={`sb-filter ${activeFilters.isRead === false ? "active" : ""}`}
           onClick={() => setFilter({ isRead: false, neverOpened: undefined })}
         >
-          Unread
-          <span className="badge">{resourceCounts.unread}</span>
+          Unread <span className="sb-badge">{resourceCounts.unread}</span>
         </button>
-
         <button
-          className={`filter-item ${activeFilters.isRead === true ? "active" : ""}`}
+          className={`sb-filter ${activeFilters.isRead === true ? "active" : ""}`}
           onClick={() => setFilter({ isRead: true, neverOpened: undefined })}
         >
-          Read
-          <span className="badge">{resourceCounts.read}</span>
+          Read <span className="sb-badge">{resourceCounts.read}</span>
         </button>
-
         <button
-          className={`filter-item ${activeFilters.neverOpened ? "active" : ""}`}
-          onClick={() => setFilter({ neverOpened: true, isRead: undefined })}
+          className={`sb-filter ${activeFilters.isRevisit ? "active" : ""}`}
+          onClick={() =>
+            activeFilters.isRevisit
+              ? removeFilter("isRevisit")
+              : setFilter({ isRevisit: true })
+          }
         >
-          Never Opened
-        </button>
-
-        <button
-          className={`filter-item ${activeFilters.isRevisit ? "active" : ""}`}
-          onClick={() => {
-            if (activeFilters.isRevisit) {
-              removeFilter("isRevisit");
-            } else {
-              setFilter({ isRevisit: true });
-            }
-          }}
-        >
-          Revisit Later
-          <span className="badge">{resourceCounts.revisit}</span>
+          Revisit <span className="sb-badge">{resourceCounts.revisit}</span>
         </button>
       </div>
-
-      <div className="sidebar-section">
-        <p className="sidebar-label">DATE SAVED</p>
-
-        <button
-          className={`filter-item ${!activeFilters.dateRange ? "active" : ""}`}
-          onClick={() => removeFilter("dateRange")}
-        >
-          All Time
-        </button>
-
-        <button
-          className={`filter-item ${activeFilters.dateRange === "week" ? "active" : ""}`}
-          onClick={() => setFilter({ dateRange: "week" })}
-        >
-          Last 7 Days
-        </button>
-
-        <button
-          className={`filter-item ${activeFilters.dateRange === "month" ? "active" : ""}`}
-          onClick={() => setFilter({ dateRange: "month" })}
-        >
-          This Month
-        </button>
-
-        <button
-          className={`filter-item ${activeFilters.dateRange === "older" ? "active" : ""}`}
-          onClick={() => setFilter({ dateRange: "older" })}
-        >
-          Older
-        </button>
-      </div>
-
       {allTags.length > 0 && (
-        <div className="sidebar-section">
-          <p className="sidebar-label">TAGS</p>
-
-          <div className="tag-list">
-            {allTags.map((tag: string) => (
+        <div className="sb-section">
+          <p className="sb-label">TAGS</p>
+          <div className="sb-tags">
+            {allTags.map((t: string) => (
               <button
-                key={tag}
-                className={`tag-filter ${activeFilters.tag === tag ? "active" : ""}`}
-                onClick={() => {
-                  if (activeFilters.tag === tag) {
-                    removeFilter("tag");
-                  } else {
-                    setFilter({ tag });
-                  }
-                }}
+                key={t}
+                className={`sb-tag ${activeFilters.tag === t ? "active" : ""}`}
+                onClick={() =>
+                  activeFilters.tag === t
+                    ? removeFilter("tag")
+                    : setFilter({ tag: t })
+                }
               >
-                #{tag}
+                #{t}
               </button>
             ))}
           </div>
         </div>
       )}
-
-      {hasActiveFilters && (
-        <button className="clear-all-btn" onClick={clearAllFilters}>
+      {Object.keys(activeFilters).length > 0 && (
+        <button className="sb-clear" onClick={clearAll}>
           Clear All Filters
         </button>
       )}

@@ -1,0 +1,9 @@
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f3ff;
+}
+.app-content {
+  flex: 1;
+  overflow-y: auto;
+}

@@ -1,14 +1,19 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../Lib/supabase";
 import type { Category } from "../Types/category";
 
-// Hooks
+// Hook that manages all category operations
+// Used by: FilterSidebar (to list categories), ResourceForm (to populate dropdown)
+// Pattern: fetch on mount, re-fetch after every mutation to stay in sync with the database
+
 export const useCategories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch all categories for logged-in user, sorted alphabetically
-  const fetchCategories = useCallback(async () => {
+  // Reusable fetch — called after create, update, delete
+  // This is NOT the initial load. It's called by user-triggered actions,
+  // so calling setLoading here is fine (not inside a useEffect).
+  const fetchCategories = async () => {
     setLoading(true);
 
     const { data, error } = await supabase
@@ -19,12 +24,13 @@ export const useCategories = () => {
     if (error) {
       console.error("Failed to fetch categories:", error.message);
     }
-    // Fallback option to empty array for if data is null or something unexpected happen
+
     setCategories(data || []);
     setLoading(false);
-  }, []);
+  };
 
-  // Create a new category using user's ID
+  // Create a new category
+  // We need the user's ID because every category belongs to a specific user
   const createCategory = async (name: string) => {
     const {
       data: { user },
@@ -40,11 +46,11 @@ export const useCategories = () => {
       return;
     }
 
-    // Re-fetch to keep local state in sync with the database
     await fetchCategories();
   };
 
-  // Renaming a category
+  // Rename a category
+  // .eq('id', id) is the WHERE clause — without it, every row would update
   const updateCategory = async (id: string, name: string) => {
     const { error } = await supabase
       .from("categories")
@@ -60,6 +66,8 @@ export const useCategories = () => {
   };
 
   // Delete a category
+  // Resources in this category won't be deleted — they'll just lose their
+  // category reference (category_id becomes null) because of ON DELETE SET NULL
   const deleteCategory = async (id: string) => {
     const { error } = await supabase.from("categories").delete().eq("id", id);
 
@@ -71,7 +79,8 @@ export const useCategories = () => {
     await fetchCategories();
   };
 
-  // Seeding the four default categories for a new user after signup
+  // Seed the four default categories for a new user after signup
+  // Called once from the auth context, not from individual components
   const seedDefaults = async (userId: string) => {
     const defaults = ["Work", "Learning", "Personal", "Business"];
 
@@ -90,6 +99,15 @@ export const useCategories = () => {
     await fetchCategories();
   };
 
+  // ─── CHANGED: Initial load on mount ───
+  // Previously this called fetchCategories() directly inside useEffect,
+  // which triggered ESLint's set-state-in-effect rule because fetchCategories
+  // calls setLoading(true) synchronously when the effect runs.
+  //
+  // Fix: define an async function INSIDE the effect that does the initial fetch.
+  // loading already starts as true (from useState above), so we don't set it here.
+  // The isMounted flag prevents a setState call if the component unmounts
+  // before the fetch finishes (e.g. the user navigates away quickly).
   useEffect(() => {
     let isMounted = true;
 
@@ -117,6 +135,7 @@ export const useCategories = () => {
       isMounted = false;
     };
   }, []);
+  // ─── END CHANGED ───
 
   return {
     categories,

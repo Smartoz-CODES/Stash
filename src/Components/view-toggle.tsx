@@ -1,15 +1,12 @@
-import "../Styles/components.css";
+import "../Styles/view-toggle.css"
 
-type Props = {
-  view: "grid" | "list";
-  onChange: (view: "grid" | "list") => void;
-};
+type Props = { view: "grid" | "list"; onChange: (v: "grid" | "list") => void };
 
 export default function ViewToggle({ view, onChange }: Props) {
   return (
     <div className="view-toggle">
       <button
-        className={`toggle-btn ${view === "list" ? "active" : ""}`}
+        className={`vt-btn ${view === "list" ? "active" : ""}`}
         onClick={() => onChange("list")}
         aria-label="List view"
       >
@@ -19,9 +16,8 @@ export default function ViewToggle({ view, onChange }: Props) {
           <rect x="1" y="14" width="16" height="2" rx="1" fill="currentColor" />
         </svg>
       </button>
-
       <button
-        className={`toggle-btn ${view === "grid" ? "active" : ""}`}
+        className={`vt-btn ${view === "grid" ? "active" : ""}`}
         onClick={() => onChange("grid")}
         aria-label="Grid view"
       >

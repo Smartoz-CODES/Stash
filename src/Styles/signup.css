@@ -1,0 +1,9 @@
+.signup-container {
+  width: 100%;
+  max-width: 480px;
+}
+.name-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
