@@ -1,0 +1,41 @@
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #3d3d3d;
+  cursor: pointer;
+  white-space: nowrap;
+  position: relative;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+  flex-shrink: 0;
+}
+
+.filter-btn:hover {
+  background: #f3f0ff;
+  border-color: #6344e3;
+  color: #6344e3;
+}
+
+.filter-btn--active {
+  background: #f3f0ff;
+  border-color: #6344e3;
+  color: #6344e3;
+}
+
+.filter-btn-dot {
+  width: 7px;
+  height: 7px;
+  background: #6344e3;
+  border-radius: 50%;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+}

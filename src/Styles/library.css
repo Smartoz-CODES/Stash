@@ -1,0 +1,206 @@
+.library-page {
+  padding: 0;
+  min-height: 100vh;
+  background: #e0daf9;
+  display: flex;
+  flex-direction: column;
+}
+
+.library-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* ── Top bar ── */
+.library-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px 12px;
+  gap: 16px;
+}
+
+.library-topbar-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.library-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f0f1a;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.library-count {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.library-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.library-add-btn {
+  background: #6344e3;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+
+.library-add-btn:hover {
+  background: #5234c9;
+}
+
+.library-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #6344e3;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* ── Controls row (chips + sort) ── */
+.library-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px 20px;
+  gap: 16px;
+}
+
+.library-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.library-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #3d3d3d;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.library-chip:hover {
+  background: #f3f0ff;
+}
+
+.chip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.chip-dot--reading {
+  background: #d1a52f;
+}
+.chip-dot--completed {
+  background: #2ca74f;
+}
+.chip-dot--to-read {
+  background: #6344e3;
+}
+
+/* ── Sort control ── */
+.library-sort {
+  position: relative;
+}
+
+.library-sort-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 13px;
+  color: #3d3d3d;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.library-sort-btn:hover {
+  background: #f9fafb;
+}
+
+.library-sort-btn strong {
+  color: #6344e3;
+  font-weight: 600;
+}
+
+.library-sort-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  min-width: 160px;
+  overflow: hidden;
+}
+
+.sort-option {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  text-align: left;
+  border: none;
+  background: none;
+  font-size: 13px;
+  color: #3d3d3d;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.sort-option:hover {
+  background: #f3f0ff;
+}
+
+.sort-option.active {
+  color: #6344e3;
+  font-weight: 600;
+  background: #f3f0ff;
+}
+
+/* ── Resource grid ── */
+.library-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  padding: 0 28px 28px;
+}

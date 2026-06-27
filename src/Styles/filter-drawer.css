@@ -1,0 +1,291 @@
+.fd-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 150;
+}
+
+/* ── Drawer ── */
+.fd-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 360px;
+  height: 100vh;
+  background: white;
+  z-index: 151;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
+  animation: fd-slide-in 0.25s ease;
+}
+
+@keyframes fd-slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* ── Header ── */
+.fd-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 20px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  flex-shrink: 0;
+}
+
+.fd-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0b0b0b;
+  margin: 0;
+}
+
+.fd-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.fd-close:hover {
+  background: #f3f4f6;
+  color: #0b0b0b;
+}
+
+/* ── Scrollable body ── */
+.fd-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── Section ── */
+.fd-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fd-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0b0b0b;
+  margin: 0;
+}
+
+/* ── Checkbox list ── */
+.fd-check-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fd-check-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.fd-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #6344e3;
+  cursor: pointer;
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+
+.fd-check-label {
+  font-size: 14px;
+  color: #3d3d3d;
+  font-weight: 400;
+}
+
+/* ── Tags ── */
+.fd-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.fd-tag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #f3f0ff;
+  color: #6344e3;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.fd-tag:hover {
+  background: #ede9fe;
+}
+
+.fd-tag.active {
+  background: #6344e3;
+  color: white;
+}
+
+.fd-tag-x {
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* ── Date input ── */
+.fd-date-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px 14px;
+  background: #fafafa;
+  transition: border-color 0.2s;
+}
+
+.fd-date-input:focus-within {
+  border-color: #6344e3;
+  box-shadow: 0 0 0 3px rgba(99, 68, 227, 0.1);
+  background: white;
+}
+
+.fd-date-icon {
+  color: #6344e3;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.fd-date-field {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #1f2937;
+  background: transparent;
+  width: 100%;
+  font-family: inherit;
+}
+
+.fd-date-field::placeholder {
+  color: #9ca3af;
+}
+
+.fd-date-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+/* ── Favourites toggle ── */
+.fd-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fd-toggle-label {
+  font-size: 14px;
+  color: #3d3d3d;
+}
+
+.fd-toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background: #e5e7eb;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.fd-toggle.active {
+  background: #6344e3;
+}
+
+.fd-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  display: block;
+}
+
+.fd-toggle.active .fd-toggle-thumb {
+  transform: translateX(20px);
+}
+
+/* ── Footer ── */
+.fd-footer {
+  display: flex;
+  gap: 12px;
+  padding: 16px 20px 24px;
+  border-top: 1px solid #f3f4f6;
+  flex-shrink: 0;
+}
+
+.fd-reset-btn {
+  flex: 1;
+  padding: 11px;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4b5563;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.fd-reset-btn:hover {
+  background: #f9fafb;
+}
+
+.fd-apply-btn {
+  flex: 1;
+  padding: 11px;
+  background: #6344e3;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.fd-apply-btn:hover {
+  background: #5234c9;
+}

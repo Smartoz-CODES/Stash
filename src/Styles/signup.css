@@ -1,9 +1,247 @@
+/* ── Signup container ── */
 .signup-container {
   width: 100%;
   max-width: 480px;
 }
+
+/* Badge */
+.form-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #6344e3;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.form-badge::before {
+  content: "✦";
+  font-size: 20px;
+}
+
+/* Title */
+.form-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0f0f0f;
+  margin-bottom: 8px;
+  line-height: 1.15;
+}
+
+/* Subtitle */
+.form-subtitle {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 28px;
+}
+
+.form-subtitle a {
+  color: #6344e3;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.form-subtitle a:hover {
+  text-decoration: underline;
+}
+
+/* ── Form ── */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Name row */
 .name-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
+}
+
+/* Form group */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #2d2d2d;
+}
+
+/* Input base */
+.form-group input {
+  width: 100%;
+  height: 43px;
+  padding: 8px 16px 8px 40px;
+  border: 1px solid #8a8a8a;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #1a1a1a;
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  border-color: #6344e3;
+  box-shadow: 0 0 0 3px rgba(99, 68, 227, 0.12);
+}
+
+/* Fix browser autofill blue tint */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset;
+  -webkit-text-fill-color: #1a1a1a;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Input wrapper (for icon) */
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrap input {
+  padding-left: 40px;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  width: 18px;
+  height: 18px;
+  color: #8a8a8a;
+  pointer-events: none;
+}
+
+/* Password wrapper */
+.pw-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.pw-wrap input {
+  width: 100%;
+  height: 43px;
+  padding: 8px 48px 8px 40px;
+  border: 1px solid #8a8a8a;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #1a1a1a;
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.pw-wrap input:focus {
+  border-color: #6344e3;
+  box-shadow: 0 0 0 3px rgba(99, 68, 227, 0.12);
+}
+
+.pw-wrap input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset;
+  -webkit-text-fill-color: #1a1a1a;
+}
+
+/* Eye toggle button */
+.pw-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  color: #8a8a8a;
+  transition: color 0.2s;
+}
+
+.pw-toggle:hover {
+  color: #6344e3;
+}
+
+.pw-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Checkbox row */
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #555;
+}
+
+.checkbox-row input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #6344e3;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 3px;
+}
+
+.checkbox-row a {
+  color: #6344e3;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.checkbox-row a:hover {
+  text-decoration: underline;
+}
+
+/* Error */
+.form-error {
+  font-size: 13px;
+  color: #dc2626;
+  margin-top: -8px;
+}
+
+/* Submit button */
+.submit-btn {
+  width: 100%;
+  height: 40px;
+  background: #6344e3;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition:
+    background 0.2s,
+    opacity 0.2s;
+  margin-top: 4px;
+}
+
+.submit-btn:hover {
+  background: #5234c9;
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.submit-btn svg {
+  width: 18px;
+  height: 18px;
 }

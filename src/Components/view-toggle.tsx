@@ -1,4 +1,4 @@
-import "../Styles/view-toggle.css"
+import "../Styles/view-toggle.css";
 
 type Props = { view: "grid" | "list"; onChange: (v: "grid" | "list") => void };
 

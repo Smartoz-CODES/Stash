@@ -1,7 +1,11 @@
 .dashboard {
-  padding: 24px 32px;
-  max-width: 1200px;
+  padding: 0;
+  min-height: 100vh;
+  background: #e0daf9;
+  display: flex;
+  flex-direction: column;
 }
+
 .dash-loading {
   display: flex;
   justify-content: center;
@@ -9,72 +13,186 @@
   height: 60vh;
   color: #9ca3af;
 }
-.dash-header {
+
+/* ── Top bar ── */
+.dash-topbar {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 24px;
+  padding: 16px 28px;
+  gap: 16px;
 }
-.dash-title {
-  font-size: 28px;
-  font-weight: 700;
-  color: #1f2937;
-  margin: 0;
-}
-.dash-count {
-  font-size: 14px;
-  color: #9ca3af;
-}
-.dash-actions {
+
+.dash-topbar-right {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-shrink: 0;
 }
-.dash-save-btn {
-  background: #7c3aed;
+
+.dash-add-btn {
+  background: #6344e3;
   color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 10px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
 }
-.dash-save-btn:hover {
-  background: #6d28d9;
+
+.dash-add-btn:hover {
+  background: #5234c9;
 }
+
+.dash-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #6344e3;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* ── Greeting ── */
+.dash-greeting-area {
+  padding: 8px 28px 24px;
+}
+
+.dash-greeting {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0f0f1a;
+  margin-bottom: 6px;
+  line-height: 1.15;
+}
+
+.dash-greeting-sub {
+  font-size: 14px;
+  color: #5b4b9a;
+}
+
+/* ── Stat cards ── */
 .dash-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
-  margin-bottom: 28px;
+  padding: 0 28px 28px;
 }
+
 .stat-card {
   background: white;
-  border: 1px solid #f3f4f6;
-  border-radius: 14px;
-  padding: 18px 20px;
+  border-radius: 16px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 14px;
+  row-gap: 12px;
+  align-items: start;
 }
+
+.stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-row: 1;
+}
+
+.stat-icon--total {
+  background: #ede9fe;
+  color: #6344e3;
+}
+.stat-icon--unread {
+  background: #fef3c7;
+  color: #d97706;
+}
+.stat-icon--read {
+  background: #d1fae5;
+  color: #059669;
+}
+.stat-icon--revisit {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.stat-info {
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 .stat-num {
-  font-size: 28px;
-  font-weight: 700;
-  color: #1f2937;
-  display: block;
+  font-size: 26px;
+  font-weight: 800;
+  color: #0f0f1a;
+  line-height: 1;
 }
+
 .stat-lbl {
-  font-size: 13px;
-  color: #9ca3af;
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
 }
+
+.stat-sub {
+  grid-column: 1 / -1;
+  font-size: 12px;
+  color: #6344e3;
+  font-weight: 500;
+}
+
+.stat-sub--amber {
+  color: #d97706;
+}
+.stat-sub--green {
+  color: #059669;
+}
+.stat-sub--blue {
+  color: #2563eb;
+}
+
+/* ── Section header ── */
+.dash-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px 16px;
+}
+
+.dash-section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f0f1a;
+}
+
+/* ── Resource grid ── */
 .dash-grid {
+  padding: 0 28px 28px;
   display: grid;
   gap: 16px;
 }
+
 .dash-grid.grid {
   grid-template-columns: repeat(3, 1fr);
 }
+
 .dash-grid.list {
   grid-template-columns: 1fr;
 }
+
+/* ── Empty state ── */
 .dash-empty {
   display: flex;
   flex-direction: column;
@@ -82,27 +200,16 @@
   padding: 80px 20px;
   text-align: center;
 }
+
 .dash-empty h2 {
   font-size: 20px;
   color: #1f2937;
   margin-bottom: 8px;
 }
+
 .dash-empty p {
   font-size: 14px;
   color: #6b7280;
   max-width: 400px;
   line-height: 1.6;
-}
-.dash-clear-btn {
-  margin-top: 16px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  color: #7c3aed;
-  padding: 8px 20px;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-}
-.dash-clear-btn:hover {
-  background: #f3f0ff;
 }

@@ -22,27 +22,30 @@ export default function TagInput({ tags, onChange, placeholder }: Props) {
     <div className="tag-input">
       {tags.map((tag: string) => (
         <span key={tag} className="chip">
-          {tag}
+          #{tag}
           <button
+            type="button"
             onClick={() => onChange(tags.filter((t: string) => t !== tag))}
+            aria-label={`Remove ${tag}`}
           >
-            ×
+            &times;
           </button>
         </span>
       ))}
       <input
         value={input}
-        placeholder={placeholder || "Add tag"}
+        placeholder={tags.length === 0 ? placeholder || "+Add Tag" : "+Add Tag"}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === "Backspace" && input === "" && tags.length > 0) {
             onChange(tags.slice(0, -1));
           }
-          if (e.key === "Enter") {
+          if (e.key === "Enter" || e.key === ",") {
             e.preventDefault();
             addTag();
           }
         }}
+        onBlur={addTag}
       />
     </div>
   );

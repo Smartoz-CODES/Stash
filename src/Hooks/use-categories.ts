@@ -2,20 +2,23 @@ import { useState, useEffect } from "react";
 import { supabase } from "../Lib/supabase";
 import type { Category } from "../Types/category";
 
-// Hook that manages all category operations
-// Used by: FilterSidebar (to list categories), ResourceForm (to populate dropdown)
-// Pattern: fetch on mount, re-fetch after every mutation to stay in sync with the database
+// Default categories to seed if the user has none.
+// Matches what the backend trigger seeds for new users.
+const DEFAULT_CATEGORIES = [
+  "Videos",
+  "Articles",
+  "Documents",
+  "Tutorials",
+  "Tools",
+  "Podcasts",
+];
 
 export const useCategories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Reusable fetch — called after create, update, delete
-  // This is NOT the initial load. It's called by user-triggered actions,
-  // so calling setLoading here is fine (not inside a useEffect).
   const fetchCategories = async () => {
     setLoading(true);
-
     const { data, error } = await supabase
       .from("categories")
       .select("*")
@@ -29,8 +32,6 @@ export const useCategories = () => {
     setLoading(false);
   };
 
-  // Create a new category
-  // We need the user's ID because every category belongs to a specific user
   const createCategory = async (name: string) => {
     const {
       data: { user },
@@ -49,8 +50,6 @@ export const useCategories = () => {
     await fetchCategories();
   };
 
-  // Rename a category
-  // .eq('id', id) is the WHERE clause — without it, every row would update
   const updateCategory = async (id: string, name: string) => {
     const { error } = await supabase
       .from("categories")
@@ -65,9 +64,6 @@ export const useCategories = () => {
     await fetchCategories();
   };
 
-  // Delete a category
-  // Resources in this category won't be deleted — they'll just lose their
-  // category reference (category_id becomes null) because of ON DELETE SET NULL
   const deleteCategory = async (id: string) => {
     const { error } = await supabase.from("categories").delete().eq("id", id);
 
@@ -79,18 +75,13 @@ export const useCategories = () => {
     await fetchCategories();
   };
 
-  // Seed the four default categories for a new user after signup
-  // Called once from the auth context, not from individual components
   const seedDefaults = async (userId: string) => {
-    const defaults = ["Work", "Learning", "Personal", "Business"];
-
-    const rows = defaults.map((name) => ({
+    const rows = DEFAULT_CATEGORIES.map((name) => ({
       name,
       user_id: userId,
     }));
 
     const { error } = await supabase.from("categories").insert(rows);
-
     if (error) {
       console.error("Failed to seed default categories:", error.message);
       return;
@@ -99,17 +90,51 @@ export const useCategories = () => {
     await fetchCategories();
   };
 
-  // ─── CHANGED: Initial load on mount ───
-  // Previously this called fetchCategories() directly inside useEffect,
-  // which triggered ESLint's set-state-in-effect rule because fetchCategories
-  // calls setLoading(true) synchronously when the effect runs.
-  //
-  // Fix: define an async function INSIDE the effect that does the initial fetch.
-  // loading already starts as true (from useState above), so we don't set it here.
-  // The isMounted flag prevents a setState call if the component unmounts
-  // before the fetch finishes (e.g. the user navigates away quickly).
   useEffect(() => {
     let isMounted = true;
+
+    // Seeds default categories for users who signed up before the
+    // Postgres trigger was added, or in case the trigger didn't fire.
+    const seedDefaultsIfEmpty = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: existing } = await supabase
+        .from("categories")
+        .select("id")
+        .limit(1);
+
+      // Only seed if the user genuinely has zero categories
+      // Check by name to avoid duplicating what the trigger already created
+      if (existing && existing.length > 0) return;
+
+      // Extra safety check — count all categories for this user
+      const { count } = await supabase
+        .from("categories")
+        .select("*", { count: "exact", head: true });
+
+      if (count && count > 0) return;
+
+      const rows = DEFAULT_CATEGORIES.map((name) => ({
+        name,
+        user_id: user.id,
+      }));
+
+      const { error } = await supabase.from("categories").insert(rows);
+      if (error) {
+        console.error("Failed to seed default categories:", error.message);
+        return;
+      }
+
+      const { data } = await supabase
+        .from("categories")
+        .select("*")
+        .order("name");
+
+      if (isMounted) setCategories(data || []);
+    };
 
     const loadInitialData = async () => {
       const { data, error } = await supabase
@@ -117,25 +142,30 @@ export const useCategories = () => {
         .select("*")
         .order("name");
 
-      // If the component unmounted while we were waiting, don't set state
       if (!isMounted) return;
 
       if (error) {
         console.error("Failed to fetch categories:", error.message);
+        setCategories([]);
+        setLoading(false);
+        return;
       }
 
-      setCategories(data || []);
+      const fetched = data || [];
+      setCategories(fetched);
       setLoading(false);
+
+      if (fetched.length === 0) {
+        await seedDefaultsIfEmpty();
+      }
     };
 
     loadInitialData();
 
-    // Cleanup: called when the component unmounts
     return () => {
       isMounted = false;
     };
   }, []);
-  // ─── END CHANGED ───
 
   return {
     categories,
