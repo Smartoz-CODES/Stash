@@ -4,3 +4,10 @@
 
 [build.environment]
   SECRETS_SCAN_OMIT_KEYS = "VITE_SUPABASE_ANON_KEY,VITE_SUPABASE_URL"
+
+# Redirect all routes to index.html so React Router handles navigation.
+# Without this, refreshing on /dashboard or /library returns a 404.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
