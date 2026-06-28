@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../../Hooks/use-auth";
+import { supabase } from "../../Lib/supabase";
 import "../../Styles/login.css";
 
 /* ── SVG Icons ── */
@@ -80,20 +80,33 @@ const ArrowIcon = () => (
 /* ── Component ── */
 const Login = () => {
   const navigate = useNavigate();
-  const { signIn } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError("");
     try {
-      await signIn(email, password);
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (signInError) {
+        setError("Invalid email or password.");
+        return;
+      }
+
+      if (!rememberMe) {
+        sessionStorage.setItem("stash_session_only", "true");
+      } else {
+        sessionStorage.removeItem("stash_session_only");
+      }
+
       navigate("/dashboard");
     } catch {
       setError("Invalid email or password.");
@@ -109,7 +122,6 @@ const Login = () => {
       <p className="form-subtitle">
         Don't have an account? <Link to="/signup">Sign up</Link>
       </p>
-
       <form className="auth-form" onSubmit={handleSubmit}>
         {/* Email */}
         <div className="form-group">
@@ -119,7 +131,7 @@ const Login = () => {
             <input
               id="login-email"
               type="email"
-              placeholder="amelia@example.com"
+              placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -169,13 +181,6 @@ const Login = () => {
           {loading ? "Signing in..." : "Sign in"}
           {!loading && <ArrowIcon />}
         </button>
-
-        {/* Legal */}
-        <p className="form-legal">
-          By signing in, you agree to the{" "}
-          <Link to="/terms">Terms of Service</Link> and{" "}
-          <Link to="/privacy">Privacy Policy</Link>
-        </p>
       </form>
     </div>
   );

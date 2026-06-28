@@ -7,7 +7,7 @@ const AuthLayout = () => {
 
   return (
     <div className="auth-layout">
-      {/* Left brand panel  */}
+      {/* Left brand panel */}
       <aside className="auth-brand">
         {/* Third decorative circle */}
         <div className="auth-brand-circle3" />
@@ -15,11 +15,12 @@ const AuthLayout = () => {
         <div className="brand-content">
           {/* Logo */}
           <div className="brand-logo">
-            <img src="/images/stash.png" alt="Stash logo" />
+            <a href="/dashboard">
+              <img src="/images/stash.png" alt="Stash logo" />
+            </a>
           </div>
 
           {isSignup ? (
-            /* ── Signup variant ── */
             <>
               <h2 className="brand-heading">
                 Start building your personal library today.
@@ -57,7 +58,7 @@ const AuthLayout = () => {
                 you.
               </p>
 
-              {/* Three feature callouts */}
+              {/* Feature callouts */}
               <ul className="brand-features">
                 <li>
                   <BookmarkIcon />

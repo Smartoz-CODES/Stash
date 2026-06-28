@@ -84,6 +84,7 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showPw, setShowPw] = useState(false);
+
   // Password strength validation
   const getPasswordStrength = (pw: string) => {
     if (pw.length === 0) return null;
@@ -102,7 +103,6 @@ const Signup = () => {
   };
 
   const strength = getPasswordStrength(password);
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
@@ -161,6 +161,7 @@ const Signup = () => {
       <p className="form-subtitle">
         Already have an account? <Link to="/login">Sign in</Link>
       </p>
+
       <form className="auth-form" onSubmit={handleSubmit}>
         {/* Username */}
         <div className="form-group">
@@ -170,7 +171,7 @@ const Signup = () => {
             <input
               id="su-username"
               type="text"
-              placeholder="e.g. amelia_john"
+              placeholder="e.g. john_doe"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -178,6 +179,7 @@ const Signup = () => {
             />
           </div>
         </div>
+
         {/* Email */}
         <div className="form-group">
           <label htmlFor="su-email">Email address</label>
@@ -186,7 +188,7 @@ const Signup = () => {
             <input
               id="su-email"
               type="email"
-              placeholder="amelia@example.com"
+              placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -232,6 +234,7 @@ const Signup = () => {
             </div>
           )}
         </div>
+
         {error && <p className="form-error">{error}</p>}
         <button type="submit" className="submit-btn" disabled={loading}>
           {loading ? "Creating account..." : "Create free account"}

@@ -160,6 +160,7 @@ export default function FilterSidebar({
   const location = useLocation();
   const { user, signOut } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
+
   const setFilter = (u: Partial<FilterParams>) =>
     onFilterChange({ ...activeFilters, ...u });
   const removeFilter = (...keys: (keyof FilterParams)[]) => {
@@ -170,9 +171,9 @@ export default function FilterSidebar({
     onFilterChange(up);
   };
   const clearAll = () => onFilterChange({});
+
   const isDashboard = location.pathname === "/dashboard";
   const isLibrary = location.pathname === "/library";
-
   const fullName =
     user?.user_metadata?.username ||
     user?.user_metadata?.full_name ||
@@ -180,6 +181,7 @@ export default function FilterSidebar({
     "User";
   const avatarInitial = fullName.charAt(0).toUpperCase();
   const role = user?.user_metadata?.role || "Member";
+
   const handleLogout = async () => {
     await signOut();
     navigate("/login");
@@ -188,11 +190,15 @@ export default function FilterSidebar({
   return (
     <aside className="filter-sidebar">
       {/* App logo */}
-      <div className="sb-logo">
+      <div
+        className="sb-logo"
+        onClick={() => navigate("/dashboard")}
+        style={{ cursor: "pointer" }}
+      >
         <img src="/images/stash.png" alt="Stash" className="sb-logo-img" />
       </div>
 
-      {/* Primary navigation*/}
+      {/* Primary navigation */}
       <nav className="sb-nav">
         <p className="sb-label">MENU</p>
         <button
@@ -276,6 +282,7 @@ export default function FilterSidebar({
         </div>
       )}
 
+      {/* Pushes Settings and user profile to the bottom of the sidebar */}
       <div className="sb-spacer" />
 
       <button className="sb-nav-item sb-settings" onClick={onManageCategories}>
@@ -314,23 +321,7 @@ export default function FilterSidebar({
           style={{ cursor: "pointer" }}
         >
           <div className="sb-user-avatar">
-            {user?.user_metadata?.avatar_url ? (
-              <img
-                src={user.user_metadata.avatar_url}
-                alt={fullName}
-                className="sb-user-avatar-img"
-              />
-            ) : (
-              <img
-                src="/images/profile.png"
-                alt={fullName}
-                className="sb-user-avatar-img"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none";
-                  e.currentTarget.parentElement!.innerText = avatarInitial;
-                }}
-              />
-            )}
+            <div className="sb-user-avatar-initial">{avatarInitial}</div>
           </div>
           <div className="sb-user-info">
             <span className="sb-user-name">{fullName}</span>

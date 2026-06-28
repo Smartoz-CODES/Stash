@@ -58,8 +58,6 @@ const AppLayout = () => {
         onManageCategories={() => setShowCategoryManager(true)}
       />
       <main className="app-content">
-        {/* Pass everything through context so child pages don't need
-            their own useResources call — preventing duplicate state */}
         <Outlet
           context={{
             activeFilters,

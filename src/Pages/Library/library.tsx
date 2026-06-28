@@ -30,7 +30,6 @@ type OutletCtx = {
 };
 
 type SortOption = "newest" | "oldest" | "recently-read";
-
 const Library = () => {
   const {
     activeFilters,
@@ -48,7 +47,6 @@ const Library = () => {
   } = useOutletContext<OutletCtx>();
 
   const { user } = useAuth();
-
   const [searchTerm, setSearchTerm] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
@@ -98,7 +96,6 @@ const Library = () => {
     };
 
     const base = [...resources];
-
     if (searchTerm) {
       const term = searchTerm.trim().toLowerCase();
       const ids = new Set(base.map((r: Resource) => r.id));
@@ -179,9 +176,10 @@ const Library = () => {
   ];
 
   const avatarInitial = (
+    user?.user_metadata?.username ||
     user?.user_metadata?.full_name ||
-    user?.user_metadata?.name ||
-    "A"
+    user?.email?.split("@")[0] ||
+    "U"
   )
     .charAt(0)
     .toUpperCase();

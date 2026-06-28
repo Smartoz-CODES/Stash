@@ -8,9 +8,8 @@
 .profile-topbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 16px 28px;
-  gap: 16px;
 }
 
 .profile-search {
@@ -125,7 +124,7 @@
   overflow: hidden;
   flex-shrink: 0;
   border: 3px solid white;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
 }
 
 .profile-avatar-lg img {
@@ -170,7 +169,6 @@
   color: #6b7280;
 }
 
-/* ── Two column body ── */
 .profile-body {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -248,22 +246,10 @@
   grid-row: 1;
 }
 
-.stat-icon--total {
-  background: #ede9fe;
-  color: #6344e3;
-}
-.stat-icon--unread {
-  background: #fef3c7;
-  color: #d97706;
-}
-.stat-icon--read {
-  background: #d1fae5;
-  color: #059669;
-}
-.stat-icon--revisit {
-  background: #dbeafe;
-  color: #2563eb;
-}
+.stat-icon--total  { background: #ede9fe; color: #6344e3; }
+.stat-icon--unread { background: #fef3c7; color: #d97706; }
+.stat-icon--read   { background: #d1fae5; color: #059669; }
+.stat-icon--revisit{ background: #dbeafe; color: #2563eb; }
 
 .profile-stat-info {
   grid-row: 1;
@@ -292,15 +278,9 @@
   font-weight: 500;
 }
 
-.stat-sub--amber {
-  color: #d97706;
-}
-.stat-sub--green {
-  color: #059669;
-}
-.stat-sub--blue {
-  color: #2563eb;
-}
+.stat-sub--amber { color: #d97706; }
+.stat-sub--green { color: #059669; }
+.stat-sub--blue  { color: #2563eb; }
 
 /* ── Categories overview ── */
 .profile-categories {
@@ -391,7 +371,6 @@
   border-radius: 50%;
 }
 
-/* Avatar images fill their container */
 .profile-avatar-sm img,
 .profile-avatar-lg img {
   width: 100%;
@@ -401,7 +380,6 @@
   display: block;
 }
 
-/* Fallback when image fails to load */
 .profile-avatar-fallback {
   display: flex;
   align-items: center;
@@ -433,4 +411,155 @@
   font-size: 13px;
   color: #9ca3af;
   padding: 8px 0;
+}
+
+/* Initial-based avatar */
+.profile-avatar-initial-lg {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #6344e3;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.profile-avatar-initial-sm {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #6344e3;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* ── Edit Profile Modal ── */
+.edit-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.edit-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 28px;
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+.edit-modal-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0b0b0b;
+  margin: 0;
+}
+
+.edit-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.edit-modal-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6344e3;
+}
+
+.edit-modal-field input,
+.edit-modal-field textarea {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #1f2937;
+  font-family: inherit;
+  outline: none;
+  transition: border 0.15s;
+  resize: vertical;
+}
+
+.edit-modal-field input:focus,
+.edit-modal-field textarea:focus {
+  border-color: #6344e3;
+}
+
+.edit-modal-error {
+  font-size: 13px;
+  color: #ef4444;
+  margin: 0;
+}
+
+.edit-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.edit-modal-cancel {
+  background: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.edit-modal-cancel:hover {
+  background: #f9fafb;
+}
+
+.edit-modal-save {
+  background: #6344e3;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.edit-modal-save:hover {
+  background: #5234c9;
+}
+
+.edit-modal-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.profile-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 16px 28px;
+  gap: 12px;
+}
+
+.profile-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }

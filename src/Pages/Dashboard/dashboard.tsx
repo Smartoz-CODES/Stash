@@ -55,14 +55,27 @@ const Dashboard = () => {
   } = useOutletContext<OutletCtx>();
 
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/login");
+  };
 
+  // Derive user info
+  const firstName =
+    user?.user_metadata?.username ||
+    user?.user_metadata?.full_name?.split(" ")[0] ||
+    user?.email?.split("@")[0] ||
+    "there";
+  const avatarInitial = firstName.charAt(0).toUpperCase();
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [showForm, setShowForm] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
   const [editingResource, setEditingResource] = useState<Resource | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [showAvatarMenu, setShowAvatarMenu] = useState(false);
+
   const stableFetch = useCallback(
     (f: FilterParams) => fetchResources(f),
     [fetchResources],
@@ -88,10 +101,13 @@ const Dashboard = () => {
     [resources],
   );
 
-  const getCategoryName = (id: string): string => {
-    const match = categories.find((c: Category) => c.id === id);
-    return match ? match.name : "Uncategorised";
-  };
+  const getCategoryName = useCallback(
+    (id: string): string => {
+      const match = categories.find((c: Category) => c.id === id);
+      return match ? match.name : "Uncategorised";
+    },
+    [categories],
+  );
 
   const displayedResources = useMemo(() => {
     if (!searchTerm) return resources;
@@ -99,14 +115,11 @@ const Dashboard = () => {
     const ids = new Set(resources.map((r: Resource) => r.id));
     const merged = [...resources];
     resources.forEach((r: Resource) => {
-      const catName =
-        categories
-          .find((c: Category) => c.id === r.category_id)
-          ?.name?.toLowerCase() || "";
+      const catName = getCategoryName(r.category_id).toLowerCase();
       if (!ids.has(r.id) && catName.includes(term)) merged.push(r);
     });
     return merged;
-  }, [resources, searchTerm, categories]);
+  }, [resources, searchTerm, getCategoryName]);
 
   const handleOpen = (id: string) => {
     markAsRead(id);
@@ -136,21 +149,6 @@ const Dashboard = () => {
     }
   };
 
-  if (loading && resources.length === 0) {
-    return (
-      <div className="dash-loading">
-        <p>Loading your library...</p>
-      </div>
-    );
-  }
-
-  const firstName =
-    user?.user_metadata?.username ||
-    user?.user_metadata?.full_name?.split(" ")[0] ||
-    user?.email?.split("@")[0] ||
-    "there";
-  const avatarInitial = firstName.charAt(0).toUpperCase();
-
   if (showForm) {
     return (
       <ResourceForm
@@ -163,6 +161,14 @@ const Dashboard = () => {
           setEditingResource(null);
         }}
       />
+    );
+  }
+
+  if (loading && resources.length === 0) {
+    return (
+      <div className="dash-loading">
+        <p>Loading your library...</p>
+      </div>
     );
   }
 
@@ -185,7 +191,34 @@ const Dashboard = () => {
           >
             + Add Resource
           </button>
-          <div className="dash-avatar">{avatarInitial}</div>
+          <div className="dash-avatar-wrapper">
+            <div
+              className="dash-avatar"
+              onClick={() => setShowAvatarMenu(!showAvatarMenu)}
+              style={{ cursor: "pointer" }}
+            >
+              {avatarInitial}
+            </div>
+            {showAvatarMenu && (
+              <div className="dash-avatar-menu">
+                <button
+                  className="dash-avatar-menu-item"
+                  onClick={() => {
+                    navigate("/profile");
+                    setShowAvatarMenu(false);
+                  }}
+                >
+                  <PersonIcon /> View Profile
+                </button>
+                <button
+                  className="dash-avatar-menu-item dash-avatar-menu-item--logout"
+                  onClick={handleLogout}
+                >
+                  <LogoutIcon /> Log out
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -308,6 +341,39 @@ const Dashboard = () => {
     </div>
   );
 };
+
+const PersonIcon = () => (
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);
+
+const LogoutIcon = () => (
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+    <polyline points="16 17 21 12 16 7" />
+    <line x1="21" y1="12" x2="9" y2="12" />
+  </svg>
+);
 
 const StackIcon = () => (
   <svg

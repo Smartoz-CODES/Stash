@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import { supabase } from "../Lib/supabase";
 import type { Category } from "../Types/category";
 
-// Default categories to seed if the user has none.
-// Matches what the backend trigger seeds for new users.
 const DEFAULT_CATEGORIES = [
   "Videos",
   "Articles",
@@ -93,8 +91,6 @@ export const useCategories = () => {
   useEffect(() => {
     let isMounted = true;
 
-    // Seeds default categories for users who signed up before the
-    // Postgres trigger was added, or in case the trigger didn't fire.
     const seedDefaultsIfEmpty = async () => {
       const {
         data: { user },
@@ -106,11 +102,8 @@ export const useCategories = () => {
         .select("id")
         .limit(1);
 
-      // Only seed if the user genuinely has zero categories
-      // Check by name to avoid duplicating what the trigger already created
       if (existing && existing.length > 0) return;
 
-      // Extra safety check — count all categories for this user
       const { count } = await supabase
         .from("categories")
         .select("*", { count: "exact", head: true });
