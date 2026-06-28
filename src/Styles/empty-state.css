@@ -8,7 +8,6 @@
   min-height: 70vh;
 }
 
-/* Illustration */
 .empty-state-illustration {
   width: 340px;
   max-width: 90%;
@@ -21,7 +20,6 @@
   object-fit: contain;
 }
 
-/* Title */
 .empty-state-title {
   font-size: 26px;
   font-weight: 800;
@@ -30,7 +28,6 @@
   line-height: 1.2;
 }
 
-/* Subtitle */
 .empty-state-subtitle {
   font-size: 14px;
   color: #6b7280;
@@ -39,7 +36,6 @@
   line-height: 1.6;
 }
 
-/* Button */
 .empty-state-actions {
   display: flex;
   gap: 12px;
@@ -60,4 +56,34 @@
 
 .empty-state-btn:hover {
   background: #5234c9;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .empty-state {
+    padding: 40px 24px 40px;
+    min-height: 60vh;
+  }
+
+  .empty-state-illustration {
+    width: 240px;
+    margin-bottom: 24px;
+  }
+
+  .empty-state-title {
+    font-size: 20px;
+  }
+
+  .empty-state-subtitle {
+    font-size: 13px;
+    max-width: 280px;
+  }
+
+  .empty-state-btn {
+    min-width: 0;
+    width: 100%;
+    max-width: 320px;
+    padding: 14px 24px;
+    font-size: 15px;
+  }
 }

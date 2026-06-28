@@ -25,3 +25,32 @@ body,
   overflow-y: auto;
   padding: 0;
 }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  html,
+  body,
+  #root {
+    overflow: auto;
+    height: auto;
+    min-height: 100%;
+  }
+
+  .app-layout {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  /* Hide desktop sidebar */
+  .filter-sidebar {
+    display: none !important;
+  }
+
+  .app-content {
+    flex: 1;
+    overflow-y: visible;
+    padding-bottom: calc(64px + env(safe-area-inset-bottom));
+  }
+}

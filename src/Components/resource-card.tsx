@@ -89,18 +89,19 @@ const DefaultIcon = () => (
   </svg>
 );
 
-const StarIcon = ({ filled }: { filled: boolean }) => (
+/* Desktop: star. Mobile: heart (via CSS the button is the same, icon swaps) */
+const HeartIcon = ({ filled }: { filled: boolean }) => (
   <svg
-    width="14"
-    height="14"
+    width="18"
+    height="18"
     viewBox="0 0 24 24"
-    fill={filled ? "#f59e0b" : "none"}
-    stroke={filled ? "#f59e0b" : "#9ca3af"}
+    fill={filled ? "#ef4444" : "none"}
+    stroke={filled ? "#ef4444" : "#9ca3af"}
     strokeWidth={2}
     strokeLinecap="round"
     strokeLinejoin="round"
   >
-    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
   </svg>
 );
 
@@ -149,7 +150,21 @@ export default function ResourceCard({
       className={`resource-card ${view} ${resource.is_read ? "read" : "unread"}`}
       onClick={() => onOpen(resource.id)}
     >
-      {/* Top row, file type icon on the left, favourite star on the right */}
+      {/* Mobile-only: category badge + status pill row at top */}
+      <div className="card-badges">
+        <span className="cat-badge">{categoryName}</span>
+        <span
+          className={`card-status ${statusClass}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleRevisit(resource.id, resource.is_revisit);
+          }}
+        >
+          {statusLabel}
+        </span>
+      </div>
+
+      {/* Top row */}
       <div className="card-header">
         <div className="card-file-icon">
           <FileIcon url={resource.url} />
@@ -162,7 +177,7 @@ export default function ResourceCard({
           }}
           aria-label={resource.is_favourite ? "Unfavourite" : "Favourite"}
         >
-          <StarIcon filled={resource.is_favourite} />
+          <HeartIcon filled={resource.is_favourite} />
         </button>
       </div>
 
@@ -172,7 +187,6 @@ export default function ResourceCard({
         <p className="card-desc">{resource.description}</p>
       )}
 
-      {/* Show up to 3 tags */}
       {resource.tags.length > 0 && (
         <div className="card-tags">
           {resource.tags.slice(0, 3).map((tag: string) => (
@@ -188,7 +202,7 @@ export default function ResourceCard({
         </div>
       )}
 
-      {/* category + read status on the left, saved date on the right */}
+      {/* Footer */}
       <div className="card-footer">
         <div className="card-footer-left">
           <span className="cat-badge">{categoryName}</span>
@@ -208,7 +222,7 @@ export default function ResourceCard({
         </div>
       </div>
 
-      {/* Edit and delete buttons */}
+      {/* Edit + Delete */}
       <div className="card-actions" onClick={(e) => e.stopPropagation()}>
         <button className="act-btn" onClick={() => onEdit(resource.id)}>
           Edit

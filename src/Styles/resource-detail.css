@@ -16,7 +16,6 @@
   font-size: 14px;
 }
 
-/* ── Breadcrumb ── */
 .rd-breadcrumb {
   display: flex;
   align-items: center;
@@ -94,7 +93,6 @@
   background: #f3f4f6;
 }
 
-/* Status badges */
 .rd-status-badge {
   display: flex;
   align-items: center;
@@ -109,12 +107,10 @@
   background: #d1fae5;
   color: #2ca74f;
 }
-
 .status--reading {
   background: #fef3c7;
   color: #d1a52f;
 }
-
 .status--to-read {
   background: #e0e7ff;
   color: #6344e3;
@@ -189,7 +185,6 @@
   gap: 0;
 }
 
-/* URL bar */
 .rd-url-bar {
   display: flex;
   align-items: center;
@@ -228,7 +223,6 @@
   color: #6344e3;
 }
 
-/* Thumbnail */
 .rd-thumbnail {
   width: 100%;
   max-height: 240px;
@@ -241,7 +235,6 @@
   object-fit: cover;
 }
 
-/* Article content */
 .rd-article {
   padding: 20px 22px;
   display: flex;
@@ -264,7 +257,6 @@
   line-height: 1.7;
 }
 
-/* Key takeaways */
 .rd-takeaways {
   margin: 0 22px 22px;
   background: white;
@@ -316,7 +308,6 @@
   margin: 0 0 14px;
 }
 
-/* Info rows */
 .rd-info-rows {
   display: flex;
   flex-direction: column;
@@ -335,13 +326,11 @@
   display: flex;
   align-items: center;
 }
-
 .rd-info-label {
   font-size: 12px;
   font-weight: 600;
   color: #6b7280;
 }
-
 .rd-info-value {
   font-size: 12px;
   color: #3d3d3d;
@@ -376,7 +365,7 @@
   display: inline-block;
 }
 
-/* ── Tags section ── */
+/* ── Tags ── */
 .rd-tags-header {
   display: flex;
   align-items: center;
@@ -456,7 +445,6 @@
   color: #9ca3af;
 }
 
-/* Tag input row */
 .rd-tag-input-row {
   display: flex;
   align-items: center;
@@ -513,4 +501,70 @@
 
 .rd-tag-cancel:hover {
   color: #6b7280;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .rd-page {
+    padding: 16px 16px;
+    gap: 14px;
+  }
+
+  .rd-breadcrumb {
+    font-size: 14px;
+  }
+
+  .rd-breadcrumb-current {
+    max-width: 200px;
+  }
+
+  .rd-title {
+    font-size: 20px;
+  }
+
+  .rd-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .rd-header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .rd-edit-btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  /* Single column layout */
+  .rd-body {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .rd-info-panel {
+    order: 2;
+  }
+
+  .rd-content-card {
+    order: 1;
+  }
+
+  .rd-article {
+    padding: 16px;
+  }
+
+  .rd-takeaways {
+    margin: 0 16px 16px;
+  }
+
+  .rd-article-title {
+    font-size: 16px;
+  }
+
+  .rd-info-row {
+    grid-template-columns: 20px 70px 1fr;
+    gap: 6px;
+  }
 }

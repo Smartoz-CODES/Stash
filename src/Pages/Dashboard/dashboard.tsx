@@ -28,6 +28,7 @@ type OutletCtx = {
   toggleRevisit: (id: string, current: boolean) => Promise<void>;
   categories: Category[];
   allTags: string[];
+  onOpenMobileNav: () => void;
 };
 
 const getGreeting = () => {
@@ -52,6 +53,7 @@ const Dashboard = () => {
     toggleRevisit,
     categories,
     allTags,
+    onOpenMobileNav,
   } = useOutletContext<OutletCtx>();
 
   const navigate = useNavigate();
@@ -61,7 +63,6 @@ const Dashboard = () => {
     navigate("/login");
   };
 
-  // Derive user info
   const firstName =
     user?.user_metadata?.username ||
     user?.user_metadata?.full_name?.split(" ")[0] ||
@@ -174,7 +175,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      {/* Top bar */}
+      {/* ── Desktop top bar ── */}
       <div className="dash-topbar">
         <SearchBar value={searchTerm} onChange={setSearchTerm} />
         <FilterButton
@@ -220,6 +221,59 @@ const Dashboard = () => {
             )}
           </div>
         </div>
+      </div>
+
+      {/* ── Mobile top bar: hamburger | + Add Resource | avatar ── */}
+      <div className="dash-mobile-topbar">
+        <button
+          className="dash-hamburger"
+          aria-label="Open menu"
+          onClick={onOpenMobileNav}
+        >
+          <HamburgerIcon />
+        </button>
+        <button
+          className="dash-add-btn"
+          onClick={() => {
+            setEditingResource(null);
+            setShowForm(true);
+          }}
+        >
+          + Add Resource
+        </button>
+        <div className="dash-avatar-wrapper">
+          <div
+            className="dash-avatar"
+            onClick={() => setShowAvatarMenu(!showAvatarMenu)}
+            style={{ cursor: "pointer" }}
+          >
+            {avatarInitial}
+          </div>
+          {showAvatarMenu && (
+            <div className="dash-avatar-menu">
+              <button
+                className="dash-avatar-menu-item"
+                onClick={() => {
+                  navigate("/profile");
+                  setShowAvatarMenu(false);
+                }}
+              >
+                <PersonIcon /> View Profile
+              </button>
+              <button
+                className="dash-avatar-menu-item dash-avatar-menu-item--logout"
+                onClick={handleLogout}
+              >
+                <LogoutIcon /> Log out
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── Mobile search bar row ── */}
+      <div className="dash-mobile-search">
+        <SearchBar value={searchTerm} onChange={setSearchTerm} />
       </div>
 
       {/* Greeting */}
@@ -286,7 +340,7 @@ const Dashboard = () => {
         <ViewToggle view={viewMode} onChange={setViewMode} />
       </div>
 
-      {/* Grid */}
+      {/* Grid / empty state */}
       {displayedResources.length === 0 ? (
         <EmptyState
           type={
@@ -341,6 +395,24 @@ const Dashboard = () => {
     </div>
   );
 };
+
+/* ── Icons ── */
+const HamburgerIcon = () => (
+  <svg
+    width="22"
+    height="22"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <line x1="3" y1="6" x2="21" y2="6" />
+    <line x1="3" y1="12" x2="21" y2="12" />
+    <line x1="3" y1="18" x2="21" y2="18" />
+  </svg>
+);
 
 const PersonIcon = () => (
   <svg

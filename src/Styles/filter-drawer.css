@@ -63,7 +63,6 @@
   color: #0b0b0b;
 }
 
-/* ── Scrollable body ── */
 .fd-body {
   flex: 1;
   overflow-y: auto;
@@ -288,4 +287,58 @@
 
 .fd-apply-btn:hover {
   background: #5234c9;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .fd-drawer {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    max-height: 90vh;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12);
+    animation: fd-slide-up 0.3s ease;
+  }
+
+  @keyframes fd-slide-up {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  /* Drag handle */
+  .fd-header {
+    padding-top: 20px;
+    position: relative;
+  }
+
+  .fd-header::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 4px;
+    background: #d1d5db;
+    border-radius: 4px;
+  }
+
+  .fd-footer {
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+}
+
+.fd-empty-hint {
+  font-size: 13px;
+  color: #9ca3af;
+  line-height: 1.5;
+  padding: 4px 0;
 }

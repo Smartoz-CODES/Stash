@@ -139,7 +139,6 @@
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   overflow: hidden;
-  padding: 0;
 }
 
 .rf-meta-image {
@@ -185,7 +184,6 @@
   overflow: hidden;
 }
 
-/* ── Two col layout ── */
 .rf-two-col {
   display: flex;
   gap: 24px;
@@ -248,7 +246,7 @@
   margin: 0;
 }
 
-/* ── Actions ── */
+/* ── Actions (desktop) ── */
 .rf-actions {
   display: flex;
   justify-content: flex-end;
@@ -287,8 +285,70 @@
 .rf-submit:hover {
   background: #5234c9;
 }
-
 .rf-submit:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .rf-page {
+    padding: 16px 16px 80px;
+  }
+
+  .rf-page-header {
+    margin-bottom: 16px;
+  }
+
+  .rf-page-title {
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .rf-card {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .rf-body {
+    gap: 18px;
+  }
+
+  .rf-meta-preview {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .rf-meta-image {
+    width: 100%;
+    height: 160px;
+  }
+
+  .rf-two-col {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .rf-group input,
+  .rf-group textarea,
+  .rf-select-wrap select,
+  .rf-input-wrap input {
+    font-size: 16px !important;
+  }
+
+  .rf-actions {
+    flex-direction: column-reverse !important;
+    gap: 10px;
+    padding-top: 12px;
+  }
+
+  .rf-cancel,
+  .rf-submit {
+    width: 100% !important;
+    padding: 14px !important;
+    font-size: 15px !important;
+    text-align: center;
+    border-radius: 12px !important;
+    box-sizing: border-box;
+  }
 }

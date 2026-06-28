@@ -4,7 +4,6 @@
   max-width: 480px;
 }
 
-/* Badge */
 .form-badge {
   display: inline-flex;
   align-items: center;
@@ -22,7 +21,6 @@
   font-size: 12px;
 }
 
-/* Title */
 .form-title {
   font-size: 32px;
   font-weight: 800;
@@ -31,7 +29,6 @@
   line-height: 1.15;
 }
 
-/* Subtitle */
 .form-subtitle {
   font-size: 14px;
   color: #555;
@@ -48,21 +45,18 @@
   text-decoration: underline;
 }
 
-/* ── Form ── */
 .auth-form {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* Name row */
 .name-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 
-/* Form group */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -75,7 +69,6 @@
   color: #2d2d2d;
 }
 
-/* Input base */
 .form-group input {
   width: 100%;
   height: 43px;
@@ -94,7 +87,6 @@
   box-shadow: 0 0 0 3px rgba(99, 68, 227, 0.12);
 }
 
-/* Fix browser autofill blue tint */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
@@ -103,7 +95,6 @@ input:-webkit-autofill:focus {
   transition: background-color 5000s ease-in-out 0s;
 }
 
-/* Input wrapper (for icon) */
 .input-wrap {
   position: relative;
   display: flex;
@@ -123,7 +114,6 @@ input:-webkit-autofill:focus {
   pointer-events: none;
 }
 
-/* Password wrapper */
 .pw-wrap {
   position: relative;
   display: flex;
@@ -153,7 +143,6 @@ input:-webkit-autofill:focus {
   -webkit-text-fill-color: #1a1a1a;
 }
 
-/* Eye toggle button */
 .pw-toggle {
   position: absolute;
   right: 12px;
@@ -176,7 +165,6 @@ input:-webkit-autofill:focus {
   height: 20px;
 }
 
-/* Checkbox row */
 .checkbox-row {
   display: flex;
   align-items: center;
@@ -204,21 +192,19 @@ input:-webkit-autofill:focus {
   text-decoration: underline;
 }
 
-/* Error */
 .form-error {
   font-size: 13px;
   color: #dc2626;
   margin-top: -8px;
 }
 
-/* Submit button */
 .submit-btn {
   width: 100%;
-  height: 40px;
+  height: 48px;
   background: #6344e3;
   color: #ffffff;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -226,7 +212,9 @@ input:-webkit-autofill:focus {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: background 0.2s, opacity 0.2s;
+  transition:
+    background 0.2s,
+    opacity 0.2s;
   margin-top: 4px;
 }
 
@@ -244,7 +232,6 @@ input:-webkit-autofill:focus {
   height: 18px;
 }
 
-/* ── Password strength indicator ── */
 .pw-strength {
   display: flex;
   align-items: center;
@@ -259,10 +246,22 @@ input:-webkit-autofill:focus {
   transition: background 0.3s;
 }
 
-.pw-strength-bar--weak  { background: #ef4444; width: 25%; }
-.pw-strength-bar--fair  { background: #f59e0b; width: 50%; }
-.pw-strength-bar--good  { background: #3b82f6; width: 75%; }
-.pw-strength-bar--strong { background: #22c55e; width: 100%; }
+.pw-strength-bar--weak {
+  background: #ef4444;
+  width: 25%;
+}
+.pw-strength-bar--fair {
+  background: #f59e0b;
+  width: 50%;
+}
+.pw-strength-bar--good {
+  background: #3b82f6;
+  width: 75%;
+}
+.pw-strength-bar--strong {
+  background: #22c55e;
+  width: 100%;
+}
 
 .pw-strength-label {
   font-size: 11px;
@@ -270,7 +269,43 @@ input:-webkit-autofill:focus {
   min-width: 40px;
 }
 
-.pw-strength-label--weak   { color: #ef4444; }
-.pw-strength-label--fair   { color: #f59e0b; }
-.pw-strength-label--good   { color: #3b82f6; }
-.pw-strength-label--strong { color: #22c55e; }
+.pw-strength-label--weak {
+  color: #ef4444;
+}
+.pw-strength-label--fair {
+  color: #f59e0b;
+}
+.pw-strength-label--good {
+  color: #3b82f6;
+}
+.pw-strength-label--strong {
+  color: #22c55e;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .signup-container {
+    max-width: 100%;
+  }
+
+  .form-title {
+    font-size: 26px;
+  }
+
+  .name-row {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group input,
+  .input-wrap input,
+  .pw-wrap input {
+    height: 48px;
+    font-size: 16px;
+  }
+
+  .submit-btn {
+    height: 52px;
+    font-size: 16px;
+    border-radius: 12px;
+  }
+}

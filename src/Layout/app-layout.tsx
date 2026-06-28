@@ -4,6 +4,8 @@ import { useResources } from "../Hooks/use-resource";
 import { useCategories } from "../Hooks/use-categories";
 import FilterSidebar from "../Components/filter-sidebar";
 import CategoryManager from "../Components/category-manager";
+import BottomNav from "../Components/bottom-nav";
+import MobileNavDrawer from "../Components/mobile-nav-drawer";
 import type { FilterParams } from "../Types/filters";
 import type { Resource } from "../Types/resource";
 import "../Styles/app-layout.css";
@@ -26,6 +28,7 @@ const AppLayout = () => {
 
   const [activeFilters, setActiveFilters] = useState<FilterParams>({});
   const [showCategoryManager, setShowCategoryManager] = useState(false);
+  const [showMobileNav, setShowMobileNav] = useState(false);
 
   const allTags = useMemo(() => {
     const tagSet = new Set<string>();
@@ -35,7 +38,6 @@ const AppLayout = () => {
     return Array.from(tagSet);
   }, [resources]);
 
-  // Counts derived from the single resources array and updates instantly
   const resourceCounts = useMemo(
     () => ({
       total: resources.length,
@@ -49,6 +51,7 @@ const AppLayout = () => {
 
   return (
     <div className="app-layout">
+      {/* Desktop sidebar */}
       <FilterSidebar
         categories={categories}
         allTags={allTags}
@@ -57,6 +60,7 @@ const AppLayout = () => {
         onFilterChange={setActiveFilters}
         onManageCategories={() => setShowCategoryManager(true)}
       />
+
       <main className="app-content">
         <Outlet
           context={{
@@ -74,9 +78,25 @@ const AppLayout = () => {
             categories,
             allTags,
             resourceCounts,
+            onOpenMobileNav: () => setShowMobileNav(true),
           }}
         />
       </main>
+
+      {/* Mobile bottom nav */}
+      <BottomNav activeFilters={activeFilters} />
+
+      {/* Mobile slide-in nav drawer */}
+      {showMobileNav && (
+        <MobileNavDrawer
+          categories={categories}
+          allTags={allTags}
+          activeFilters={activeFilters}
+          resourceCounts={resourceCounts}
+          onFilterChange={setActiveFilters}
+          onClose={() => setShowMobileNav(false)}
+        />
+      )}
 
       {showCategoryManager && (
         <CategoryManager

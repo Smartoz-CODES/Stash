@@ -172,8 +172,13 @@ export default function FilterSidebar({
   };
   const clearAll = () => onFilterChange({});
 
+  // FIX: each item is mutually exclusive
+  // Library is only active when on /library AND favourites filter is NOT set
   const isDashboard = location.pathname === "/dashboard";
-  const isLibrary = location.pathname === "/library";
+  const isLibrary =
+    location.pathname === "/library" && !activeFilters.isFavourite;
+  const isFavourite = !!activeFilters.isFavourite;
+
   const fullName =
     user?.user_metadata?.username ||
     user?.user_metadata?.full_name ||
@@ -201,6 +206,7 @@ export default function FilterSidebar({
       {/* Primary navigation */}
       <nav className="sb-nav">
         <p className="sb-label">MENU</p>
+
         <button
           className={`sb-nav-item ${isDashboard ? "active" : ""}`}
           onClick={() => {
@@ -213,9 +219,14 @@ export default function FilterSidebar({
             Dashboard
           </span>
         </button>
+
+        {/* FIX: clicking Library clears isFavourite so both can't be active */}
         <button
           className={`sb-nav-item ${isLibrary ? "active" : ""}`}
-          onClick={() => navigate("/library")}
+          onClick={() => {
+            removeFilter("isFavourite");
+            navigate("/library");
+          }}
         >
           <span className="sb-nav-left">
             <LibraryIcon />
@@ -223,16 +234,20 @@ export default function FilterSidebar({
           </span>
           <span className="sb-badge">{resourceCounts.total}</span>
         </button>
+
         <button
-          className={`sb-nav-item ${activeFilters.isFavourite ? "active" : ""}`}
-          onClick={() =>
-            activeFilters.isFavourite
-              ? removeFilter("isFavourite")
-              : setFilter({ isFavourite: true })
-          }
+          className={`sb-nav-item ${isFavourite ? "active" : ""}`}
+          onClick={() => {
+            if (isFavourite) {
+              removeFilter("isFavourite");
+            } else {
+              setFilter({ isFavourite: true });
+              navigate("/library");
+            }
+          }}
         >
           <span className="sb-nav-left">
-            <HeartIcon filled={activeFilters.isFavourite} />
+            <HeartIcon filled={isFavourite} />
             Favorite
           </span>
           <span className="sb-badge">{resourceCounts.favourites}</span>
@@ -282,7 +297,6 @@ export default function FilterSidebar({
         </div>
       )}
 
-      {/* Pushes Settings and user profile to the bottom of the sidebar */}
       <div className="sb-spacer" />
 
       <button className="sb-nav-item sb-settings" onClick={onManageCategories}>

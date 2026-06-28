@@ -32,6 +32,21 @@ const EyeOffIcon = () => (
   </svg>
 );
 
+const UserIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="input-icon"
+  >
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);
+
 const MailIcon = () => (
   <svg
     viewBox="0 0 24 24"
@@ -85,7 +100,6 @@ const Signup = () => {
   const [error, setError] = useState("");
   const [showPw, setShowPw] = useState(false);
 
-  // Password strength validation
   const getPasswordStrength = (pw: string) => {
     if (pw.length === 0) return null;
     if (pw.length < 6) return "weak";
@@ -103,6 +117,7 @@ const Signup = () => {
   };
 
   const strength = getPasswordStrength(password);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
@@ -129,8 +144,8 @@ const Signup = () => {
         password,
         options: {
           data: {
-            full_name: username.trim(),
             username: username.trim(),
+            full_name: username.trim(),
           },
         },
       });
@@ -167,11 +182,11 @@ const Signup = () => {
         <div className="form-group">
           <label htmlFor="su-username">Username</label>
           <div className="input-wrap">
-            <MailIcon />
+            <UserIcon />
             <input
               id="su-username"
               type="text"
-              placeholder="e.g. john_doe"
+              placeholder="e.g. Amelia"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -188,7 +203,7 @@ const Signup = () => {
             <input
               id="su-email"
               type="email"
-              placeholder="you@example.com"
+              placeholder="amelia@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -222,7 +237,6 @@ const Signup = () => {
               {showPw ? <EyeOffIcon /> : <EyeIcon />}
             </button>
           </div>
-          {/* Password strength indicator */}
           {strength && (
             <div className="pw-strength">
               <div className={`pw-strength-bar pw-strength-bar--${strength}`} />
@@ -236,6 +250,7 @@ const Signup = () => {
         </div>
 
         {error && <p className="form-error">{error}</p>}
+
         <button type="submit" className="submit-btn" disabled={loading}>
           {loading ? "Creating account..." : "Create free account"}
           {!loading && <ArrowIcon />}

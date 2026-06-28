@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../Hooks/use-auth";
 import ResourceCard from "../../Components/resource-card";
 import ResourceForm from "../../Components/resource-form";
@@ -27,9 +27,11 @@ type OutletCtx = {
   toggleRevisit: (id: string, current: boolean) => Promise<void>;
   categories: Category[];
   allTags: string[];
+  onOpenMobileNav: () => void;
 };
 
 type SortOption = "newest" | "oldest" | "recently-read";
+
 const Library = () => {
   const {
     activeFilters,
@@ -44,16 +46,28 @@ const Library = () => {
     toggleFavourite,
     toggleRevisit,
     categories,
+    onOpenMobileNav,
   } = useOutletContext<OutletCtx>();
 
   const { user } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Read ?filter=true once at initialisation, no effect needed
+  const openFilterOnLoad = searchParams.get("filter") === "true";
+
   const [searchTerm, setSearchTerm] = useState("");
   const [showForm, setShowForm] = useState(false);
-  const [showDrawer, setShowDrawer] = useState(false);
+  const [showDrawer, setShowDrawer] = useState(openFilterOnLoad);
   const [editingResource, setEditingResource] = useState<Resource | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<SortOption>("newest");
   const [showSortMenu, setShowSortMenu] = useState(false);
+
+  useEffect(() => {
+    if (openFilterOnLoad) {
+      setSearchParams({}, { replace: true });
+    }
+  }, [openFilterOnLoad, setSearchParams]);
 
   const allTags = useMemo(() => {
     const tagSet = new Set<string>();
@@ -89,7 +103,6 @@ const Library = () => {
   );
 
   const sortedResources = useMemo(() => {
-    // getCategoryName defined inside useMemo so it's a stable dependency
     const getCatName = (id: string): string => {
       const match = categories.find((c: Category) => c.id === id);
       return match ? match.name : "Uncategorised";
@@ -207,7 +220,7 @@ const Library = () => {
 
   return (
     <div className="library-page">
-      {/* Top bar */}
+      {/* ── Desktop top bar ── */}
       <div className="library-topbar">
         <div className="library-topbar-left">
           <h1 className="library-title">Library</h1>
@@ -230,6 +243,39 @@ const Library = () => {
           </button>
           <div className="library-avatar">{avatarInitial}</div>
         </div>
+      </div>
+
+      <div className="library-mobile-topbar">
+        <button
+          className="library-hamburger"
+          aria-label="Open menu"
+          onClick={onOpenMobileNav}
+        >
+          <HamburgerIcon />
+        </button>
+        <div className="library-mobile-title-group">
+          <h1 className="library-title">Library</h1>
+          <span className="library-count">{counts.total} resources saved</span>
+        </div>
+        <button
+          className="library-mobile-add-btn"
+          onClick={() => {
+            setEditingResource(null);
+            setShowForm(true);
+          }}
+        >
+          + Add Resource
+        </button>
+        <div className="library-avatar">{avatarInitial}</div>
+      </div>
+
+      {/* ── Mobile search + filter row ── */}
+      <div className="library-mobile-search-row">
+        <SearchBar value={searchTerm} onChange={setSearchTerm} />
+        <FilterButton
+          onClick={() => setShowDrawer(true)}
+          hasActiveFilters={Object.keys(activeFilters).length > 0}
+        />
       </div>
 
       {/* Status chips and sort */}
@@ -329,6 +375,23 @@ const Library = () => {
     </div>
   );
 };
+
+const HamburgerIcon = () => (
+  <svg
+    width="22"
+    height="22"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <line x1="3" y1="6" x2="21" y2="6" />
+    <line x1="3" y1="12" x2="21" y2="12" />
+    <line x1="3" y1="18" x2="21" y2="18" />
+  </svg>
+);
 
 const SortIcon = () => (
   <svg

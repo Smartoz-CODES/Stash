@@ -124,7 +124,6 @@ export default function FilterDrawer({
 
   return (
     <>
-      {/* Clicking the backdrop closes the drawer without applying changes */}
       <div className="fd-overlay" onClick={onClose} />
 
       <div className="fd-drawer">
@@ -136,25 +135,32 @@ export default function FilterDrawer({
         </div>
 
         <div className="fd-body">
-          {/* Filter by category */}
+          {/* Category */}
           <div className="fd-section">
             <h3 className="fd-section-title">Category</h3>
             <div className="fd-check-list">
-              {categories.map((c) => (
-                <label key={c.id} className="fd-check-item">
-                  <input
-                    type="checkbox"
-                    checked={localFilters.categoryId === c.id}
-                    onChange={() => toggleCategory(c.id)}
-                    className="fd-checkbox"
-                  />
-                  <span className="fd-check-label">{c.name}</span>
-                </label>
-              ))}
+              {categories.length === 0 ? (
+                <p className="fd-empty-hint">
+                  No categories yet — save a resource and assign it to a
+                  category first.
+                </p>
+              ) : (
+                categories.map((c) => (
+                  <label key={c.id} className="fd-check-item">
+                    <input
+                      type="checkbox"
+                      checked={localFilters.categoryId === c.id}
+                      onChange={() => toggleCategory(c.id)}
+                      className="fd-checkbox"
+                    />
+                    <span className="fd-check-label">{c.name}</span>
+                  </label>
+                ))
+              )}
             </div>
           </div>
 
-          {/* Filter by read status */}
+          {/* Status */}
           <div className="fd-section">
             <h3 className="fd-section-title">Status</h3>
             <div className="fd-check-list">
@@ -172,7 +178,7 @@ export default function FilterDrawer({
             </div>
           </div>
 
-          {/* Tag filter */}
+          {/* Tags */}
           {allTags.length > 0 && (
             <div className="fd-section">
               <h3 className="fd-section-title">Tags</h3>
@@ -193,7 +199,7 @@ export default function FilterDrawer({
             </div>
           )}
 
-          {/* Filter by date range the resource was saved */}
+          {/* Date Saved */}
           <div className="fd-section">
             <h3 className="fd-section-title">Date Saved</h3>
             <div className="fd-date-input">
@@ -235,7 +241,7 @@ export default function FilterDrawer({
             </div>
           </div>
 
-          {/* Toggle to show only resources the user has hearted */}
+          {/* Favorites */}
           <div className="fd-section">
             <h3 className="fd-section-title">Favorites</h3>
             <div className="fd-toggle-row">
@@ -253,7 +259,6 @@ export default function FilterDrawer({
           </div>
         </div>
 
-        {/* Reset clears all filters and closes; Apply sends them to the dashboard */}
         <div className="fd-footer">
           <button className="fd-reset-btn" onClick={handleReset}>
             Reset Filter
