@@ -63,7 +63,6 @@ const Dashboard = () => {
   const [showDrawer, setShowDrawer] = useState(false);
   const [editingResource, setEditingResource] = useState<Resource | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-
   const stableFetch = useCallback(
     (f: FilterParams) => fetchResources(f),
     [fetchResources],
@@ -146,10 +145,10 @@ const Dashboard = () => {
   }
 
   const firstName =
-    user?.user_metadata?.first_name ||
+    user?.user_metadata?.username ||
     user?.user_metadata?.full_name?.split(" ")[0] ||
+    user?.email?.split("@")[0] ||
     "there";
-
   const avatarInitial = firstName.charAt(0).toUpperCase();
 
   if (showForm) {

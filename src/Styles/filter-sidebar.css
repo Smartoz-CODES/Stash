@@ -70,7 +70,7 @@
   color: white;
 }
 
-/* Left side of nav item (icon + label) */
+/* Left side of nav item */
 .sb-nav-left {
   display: flex;
   align-items: center;
@@ -153,7 +153,7 @@
   border-color: #6344e3;
 }
 
-/* Spacer pushes settings + user to bottom */
+
 .sb-spacer {
   flex: 1;
 }
@@ -219,4 +219,67 @@
   object-fit: cover;
   border-radius: 50%;
   display: block;
+}
+
+/* ── User dropdown menu ── */
+.sb-user-wrapper {
+  position: relative;
+  padding: 0 8px 12px;
+}
+
+.sb-user-menu {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 8px;
+  right: 8px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  overflow: hidden;
+  z-index: 100;
+}
+
+.sb-user-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 14px;
+  border: none;
+  background: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-align: left;
+}
+
+.sb-user-menu-item:hover {
+  background: #f3f4f6;
+}
+
+.sb-user-menu-item--logout {
+  color: #ef4444;
+  border-top: 1px solid #f3f4f6;
+}
+
+.sb-user-menu-item--logout:hover {
+  background: #fef2f2;
+}
+
+/* Update sb-user to work inside wrapper */
+.sb-user-wrapper .sb-user {
+  margin: 0;
+  border-radius: 10px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.15s;
+}
+
+.sb-user-wrapper .sb-user:hover {
+  background: rgba(99, 68, 227, 0.08);
 }

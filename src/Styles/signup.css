@@ -18,8 +18,8 @@
 }
 
 .form-badge::before {
-  content: "✦";
-  font-size: 20px;
+  content: "";
+  font-size: 12px;
 }
 
 /* Title */
@@ -226,9 +226,7 @@ input:-webkit-autofill:focus {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition:
-    background 0.2s,
-    opacity 0.2s;
+  transition: background 0.2s, opacity 0.2s;
   margin-top: 4px;
 }
 
@@ -245,3 +243,34 @@ input:-webkit-autofill:focus {
   width: 18px;
   height: 18px;
 }
+
+/* ── Password strength indicator ── */
+.pw-strength {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.pw-strength-bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.pw-strength-bar--weak  { background: #ef4444; width: 25%; }
+.pw-strength-bar--fair  { background: #f59e0b; width: 50%; }
+.pw-strength-bar--good  { background: #3b82f6; width: 75%; }
+.pw-strength-bar--strong { background: #22c55e; width: 100%; }
+
+.pw-strength-label {
+  font-size: 11px;
+  font-weight: 600;
+  min-width: 40px;
+}
+
+.pw-strength-label--weak   { color: #ef4444; }
+.pw-strength-label--fair   { color: #f59e0b; }
+.pw-strength-label--good   { color: #3b82f6; }
+.pw-strength-label--strong { color: #22c55e; }

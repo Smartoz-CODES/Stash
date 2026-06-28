@@ -249,20 +249,19 @@ const Profile = () => {
   const { resources } = useResources();
   const { categories } = useCategories();
 
-  /* Derive user details from auth metadata */
+  /* Derive user details from auth metadata — uses username set at signup */
   const fullName =
+    user?.user_metadata?.username ||
     user?.user_metadata?.full_name ||
-    user?.user_metadata?.name ||
-    "Amelia John";
+    user?.email?.split("@")[0] ||
+    "User";
   const firstName = fullName.split(" ")[0];
   const avatarInitial = firstName.charAt(0).toUpperCase();
   const email = user?.email || "";
-  const location = user?.user_metadata?.location || "Lagos, Nigeria";
-  const bio =
-    user?.user_metadata?.bio ||
-    "A product designer and knowledge hoarder. I collect design resources, articles, and tutorials to stay ahead. Always learning, always building.";
-  const role = user?.user_metadata?.role || "Owner/Co-founder";
-  const avatarUrl = user?.user_metadata?.avatar_url || "/images/profile.png";
+  const location = user?.user_metadata?.location || "";
+  const bio = user?.user_metadata?.bio || "";
+  const role = user?.user_metadata?.role || "Member";
+  const avatarUrl = user?.user_metadata?.avatar_url || null;
 
   const memberSince = user?.created_at
     ? new Date(user.created_at).toLocaleDateString("en-US", {

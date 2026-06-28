@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../Hooks/use-auth";
 import type { Category } from "../Types/category";
@@ -93,6 +94,60 @@ const SettingsIcon = () => (
   </svg>
 );
 
+const LogoutIcon = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+    <polyline points="16 17 21 12 16 7" />
+    <line x1="21" y1="12" x2="9" y2="12" />
+  </svg>
+);
+
+const PersonIcon = () => (
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);
+
+const ChevronIcon = ({ open }: { open: boolean }) => (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    style={{
+      transform: open ? "rotate(180deg)" : "rotate(0deg)",
+      transition: "transform 0.2s",
+      marginLeft: "auto",
+      flexShrink: 0,
+    }}
+  >
+    <polyline points="18 15 12 9 6 15" />
+  </svg>
+);
+
 export default function FilterSidebar({
   categories,
   allTags,
@@ -103,8 +158,8 @@ export default function FilterSidebar({
 }: Props) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useAuth();
-
+  const { user, signOut } = useAuth();
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const setFilter = (u: Partial<FilterParams>) =>
     onFilterChange({ ...activeFilters, ...u });
   const removeFilter = (...keys: (keyof FilterParams)[]) => {
@@ -115,17 +170,20 @@ export default function FilterSidebar({
     onFilterChange(up);
   };
   const clearAll = () => onFilterChange({});
-
   const isDashboard = location.pathname === "/dashboard";
   const isLibrary = location.pathname === "/library";
 
-  // Derive display values from the authenticated user
   const fullName =
+    user?.user_metadata?.username ||
     user?.user_metadata?.full_name ||
-    user?.user_metadata?.name ||
-    "Amelia John";
+    user?.email?.split("@")[0] ||
+    "User";
   const avatarInitial = fullName.charAt(0).toUpperCase();
-  const role = user?.user_metadata?.role || "Owner/Co-founder";
+  const role = user?.user_metadata?.role || "Member";
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/login");
+  };
 
   return (
     <aside className="filter-sidebar">
@@ -134,7 +192,7 @@ export default function FilterSidebar({
         <img src="/images/stash.png" alt="Stash" className="sb-logo-img" />
       </div>
 
-      {/* Primary navigation, Dashboard, Library, Favorites */}
+      {/* Primary navigation*/}
       <nav className="sb-nav">
         <p className="sb-label">MENU</p>
         <button
@@ -218,7 +276,6 @@ export default function FilterSidebar({
         </div>
       )}
 
-      {/* Pushes Settings and user profile to the bottom of the sidebar */}
       <div className="sb-spacer" />
 
       <button className="sb-nav-item sb-settings" onClick={onManageCategories}>
@@ -228,34 +285,58 @@ export default function FilterSidebar({
         </span>
       </button>
 
-      <div
-        className="sb-user"
-        onClick={() => navigate("/profile")}
-        style={{ cursor: "pointer" }}
-      >
-        <div className="sb-user-avatar">
-          {user?.user_metadata?.avatar_url ? (
-            <img
-              src={user.user_metadata.avatar_url}
-              alt={fullName}
-              className="sb-user-avatar-img"
-            />
-          ) : (
-            <img
-              src="/images/profile.png"
-              alt={fullName}
-              className="sb-user-avatar-img"
-              onError={(e) => {
-                // If image fails to load, show initial instead
-                e.currentTarget.style.display = "none";
-                e.currentTarget.parentElement!.innerText = avatarInitial;
+      {/* User section */}
+      <div className="sb-user-wrapper">
+        {showUserMenu && (
+          <div className="sb-user-menu">
+            <button
+              className="sb-user-menu-item"
+              onClick={() => {
+                navigate("/profile");
+                setShowUserMenu(false);
               }}
-            />
-          )}
-        </div>
-        <div className="sb-user-info">
-          <span className="sb-user-name">{fullName}</span>
-          <span className="sb-user-role">{role}</span>
+            >
+              <PersonIcon />
+              View Profile
+            </button>
+            <button
+              className="sb-user-menu-item sb-user-menu-item--logout"
+              onClick={handleLogout}
+            >
+              <LogoutIcon />
+              Log out
+            </button>
+          </div>
+        )}
+        <div
+          className="sb-user"
+          onClick={() => setShowUserMenu(!showUserMenu)}
+          style={{ cursor: "pointer" }}
+        >
+          <div className="sb-user-avatar">
+            {user?.user_metadata?.avatar_url ? (
+              <img
+                src={user.user_metadata.avatar_url}
+                alt={fullName}
+                className="sb-user-avatar-img"
+              />
+            ) : (
+              <img
+                src="/images/profile.png"
+                alt={fullName}
+                className="sb-user-avatar-img"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                  e.currentTarget.parentElement!.innerText = avatarInitial;
+                }}
+              />
+            )}
+          </div>
+          <div className="sb-user-info">
+            <span className="sb-user-name">{fullName}</span>
+            <span className="sb-user-role">{role}</span>
+          </div>
+          <ChevronIcon open={showUserMenu} />
         </div>
       </div>
     </aside>
